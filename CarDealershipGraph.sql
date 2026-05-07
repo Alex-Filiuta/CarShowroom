@@ -38,7 +38,7 @@ CREATE TABLE Models (
     BodyType NVARCHAR(50),
     EngineType NVARCHAR(50),
     Horsepower SMALLINT,
-    FuelConsumptionCity DECIMAL(4,1),
+    FuelConsumption DECIMAL(4,1),
     TransmissionType NVARCHAR(50),
     BasePrice DECIMAL(12,2),
     IsElectric BIT DEFAULT 0,
@@ -64,7 +64,8 @@ GO
 -- УЗЕЛ 4: Клиенты (Customers)
 CREATE TABLE Customers (
     CustomerID INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerName NVARCHAR(100) NOT NULL,
+    CustomerFirstName NVARCHAR(100) NOT NULL,
+    CustomerSecondName NVARCHAR(100),
     Email NVARCHAR(100),
     PhoneNumber NVARCHAR(20),
     City NVARCHAR(100),
@@ -75,7 +76,7 @@ GO
 
 --Создание таблиц рёбер
 
--- РЕБРО 1: BELONGS_TO (Модель принадлежит Марке)
+-- РЕБРО 1: BELONGS_TO (Модель выпускается Маркой)
 -- Направление: Models -> Brands
 CREATE TABLE BELONGS_TO AS EDGE;
 GO
@@ -92,18 +93,18 @@ ADD StartDate DATE,
     IsCurrentModel BIT DEFAULT 1;
 GO
 
--- РЕБРО 2: SERVES_BRAND (Сервисный центр обслуживает Марку)
+-- РЕБРО 2: SERVES (Сервисный центр обслуживает Марку)
 -- Направление: ServiceCenters -> Brands
-CREATE TABLE SERVES_BRAND AS EDGE;
+CREATE TABLE SERVES AS EDGE;
 GO
 
-ALTER TABLE SERVES_BRAND 
-ADD CONSTRAINT EC_SERVES_BRAND 
+ALTER TABLE SERVES 
+ADD CONSTRAINT EC_SERVES 
 CONNECTION (ServiceCenters TO Brands)
 ON DELETE NO ACTION;
 GO
 
-ALTER TABLE SERVES_BRAND 
+ALTER TABLE SERVES 
 ADD SpecializationLevel NVARCHAR(50) 
     CHECK (SpecializationLevel IN ('Официальный дилер', 'Авторизованный сервис', 'Специализированный ремонт', 'Универсальный')),
     ContractStartDate DATE,
@@ -149,7 +150,7 @@ INSERT INTO Brands (BrandName, CountryOfOrigin, YearFounded, Website, IsManufact
 GO
 
 -- Заполнение Models
-INSERT INTO Models (ModelName, ProductionStartYear, ProductionEndYear, BodyType, EngineType, Horsepower, FuelConsumptionCity, TransmissionType, BasePrice, IsElectric, SafetyRating) VALUES
+INSERT INTO Models (ModelName, ProductionStartYear, ProductionEndYear, BodyType, EngineType, Horsepower, FuelConsumption, TransmissionType, BasePrice, IsElectric, SafetyRating) VALUES
 ('X5', 1999, NULL, 'Внедорожник', 'Бензиновый', 340, 11.5, 'Автомат', 8500000.00, 0, 4.8),
 ('Camry', 1982, NULL, 'Седан', 'Бензиновый', 203, 8.6, 'Автомат', 3500000.00, 0, 4.9),
 ('Model S', 2012, NULL, 'Седан', 'Электрический', 670, 0, 'Автомат', 12000000.00, 1, 5.0),
@@ -181,19 +182,19 @@ INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Speci
 GO
 
 -- Заполнение Customers
-INSERT INTO Customers (CustomerName, Email, PhoneNumber, City, RegistrationDate, LoyaltyLevel) VALUES
-('Иван Петров', 'ivan.petrov@email.ru', '+7 916 111-22-33', 'Москва', '2023-01-15', 'Gold'),
-('Мария Сидорова', 'maria.sidorova@email.ru', '+7 926 222-33-44', 'Санкт-Петербург', '2023-02-20', 'Silver'),
-('Алексей Козлов', 'alexey.kozlov@email.ru', '+7 903 333-44-55', 'Москва', '2023-03-10', 'Platinum'),
-('Елена Новикова', 'elena.novikova@email.ru', '+7 985 444-55-66', 'Екатеринбург', '2023-04-05', 'Bronze'),
-('Дмитрий Соколов', 'dmitry.sokolov@email.ru', '+7 912 555-66-77', 'Новосибирск', '2023-05-12', 'Silver'),
-('Анна Морозова', 'anna.morozova@email.ru', '+7 918 666-77-88', 'Казань', '2023-06-18', 'Gold'),
-('Сергей Волков', 'sergey.volkov@email.ru', '+7 987 777-88-99', 'Сочи', '2023-07-22', 'Bronze'),
-('Ольга Лебедева', 'olga.lebedeva@email.ru', '+7 921 888-99-00', 'Москва', '2023-08-30', 'Platinum'),
-('Михаил Павлов', 'mikhail.pavlov@email.ru', '+7 961 999-00-11', 'Краснодар', '2023-09-14', 'Silver'),
-('Татьяна Егорова', 'tatyana.egorova@email.ru', '+7 909 000-11-22', 'Ростов-на-Дону', '2023-10-25', 'Gold'),
-('Андрей Григорьев', 'andrey.grigoriev@email.ru', '+7 915 111-22-33', 'Воронеж', '2023-11-08', 'Bronze'),
-('Наталья Романова', 'natalya.romanova@email.ru', '+7 927 222-33-44', 'Москва', '2023-12-01', 'Silver');
+INSERT INTO Customers (CustomerFirstName, CustomerSecondName, Email, PhoneNumber, City, RegistrationDate, LoyaltyLevel) VALUES
+('Иван', 'Петров', 'ivan.petrov@email.ru', '+7 916 111-22-33', 'Москва', '2023-01-15', 'Gold'),
+('Мария', 'Сидорова', 'maria.sidorova@email.ru', '+7 926 222-33-44', 'Санкт-Петербург', '2023-02-20', 'Silver'),
+('Алексей', 'Козлов', 'alexey.kozlov@email.ru', '+7 903 333-44-55', 'Москва', '2023-03-10', 'Platinum'),
+('Елена', 'Новикова', 'elena.novikova@email.ru', '+7 985 444-55-66', 'Екатеринбург', '2023-04-05', 'Bronze'),
+('Дмитрий', 'Соколов', 'dmitry.sokolov@email.ru', '+7 912 555-66-77', 'Новосибирск', '2023-05-12', 'Silver'),
+('Анна', 'Морозова', 'anna.morozova@email.ru', '+7 918 666-77-88', 'Казань', '2023-06-18', 'Gold'),
+('Сергей', 'Волков', 'sergey.volkov@email.ru', '+7 987 777-88-99', 'Сочи', '2023-07-22', 'Bronze'),
+('Ольга', 'Лебедева', 'olga.lebedeva@email.ru', '+7 921 888-99-00', 'Москва', '2023-08-30', 'Platinum'),
+('Михаил', 'Павлов', 'mikhail.pavlov@email.ru', '+7 961 999-00-11', 'Краснодар', '2023-09-14', 'Silver'),
+('Татьяна', 'Егорова', 'tatyana.egorova@email.ru', '+7 909 000-11-22', 'Ростов-на-Дону', '2023-10-25', 'Gold'),
+('Андрей', 'Григорьев', 'andrey.grigoriev@email.ru', '+7 915 111-22-33', 'Воронеж', '2023-11-08', 'Bronze'),
+('Наталья', 'Романова', 'natalya.romanova@email.ru', '+7 927 222-33-44', 'Москва', '2023-12-01', 'Silver');
 GO
 
 --Заполнение таблиц рёбер
@@ -240,8 +241,8 @@ WHEN NOT MATCHED THEN
     VALUES (source.from_id, source.to_id, source.StartDate, 1);
 GO
 
--- Заполнение SERVES_BRAND: связь Сервисных центров с Марками
-MERGE SERVES_BRAND AS target
+-- Заполнение SERVES: связь Сервисных центров с Марками
+MERGE SERVES AS target
 USING (
     SELECT 
         sc.$node_id AS from_id,
@@ -289,18 +290,18 @@ USING (
         c.$node_id AS from_id,
         m.$node_id AS to_id,
         CASE 
-            WHEN c.CustomerName = 'Иван Петров' AND m.ModelName = 'X5' THEN '2024-03-15'
-            WHEN c.CustomerName = 'Мария Сидорова' AND m.ModelName = 'Camry' THEN '2024-02-20'
-            WHEN c.CustomerName = 'Алексей Козлов' AND m.ModelName = 'Model S' THEN '2024-04-10'
-            WHEN c.CustomerName = 'Елена Новикова' AND m.ModelName = 'Tucson' THEN '2024-01-25'
-            WHEN c.CustomerName = 'Дмитрий Соколов' AND m.ModelName = 'Sportage' THEN '2024-05-12'
-            WHEN c.CustomerName = 'Анна Морозова' AND m.ModelName = 'XC90' THEN '2024-03-18'
-            WHEN c.CustomerName = 'Сергей Волков' AND m.ModelName = '911' THEN '2024-06-22'
-            WHEN c.CustomerName = 'Ольга Лебедева' AND m.ModelName = 'RX' THEN '2024-04-30'
-            WHEN c.CustomerName = 'Михаил Павлов' AND m.ModelName = 'Mustang' THEN '2024-02-14'
-            WHEN c.CustomerName = 'Татьяна Егорова' AND m.ModelName = 'Model 3' THEN '2024-05-25'
-            WHEN c.CustomerName = 'Андрей Григорьев' AND m.ModelName = 'Golf' THEN '2024-03-08'
-            WHEN c.CustomerName = 'Наталья Романова' AND m.ModelName = 'A4' THEN '2024-06-01'
+            WHEN c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5' THEN '2024-03-15'
+            WHEN c.CustomerFirstName = 'Мария' AND c.CustomerSecondName = 'Сидорова' AND m.ModelName = 'Camry' THEN '2024-02-20'
+            WHEN c.CustomerFirstName = 'Алексей' AND c.CustomerSecondName = 'Козлов' AND m.ModelName = 'Model S' THEN '2024-04-10'
+            WHEN c.CustomerFirstName = 'Елена' AND c.CustomerSecondName = 'Новикова' AND m.ModelName = 'Tucson' THEN '2024-01-25'
+            WHEN c.CustomerFirstName = 'Дмитрий' AND c.CustomerSecondName = 'Соколов' AND m.ModelName = 'Sportage' THEN '2024-05-12'
+            WHEN c.CustomerFirstName = 'Анна' AND c.CustomerSecondName = 'Морозова' AND m.ModelName = 'XC90' THEN '2024-03-18'
+            WHEN c.CustomerFirstName = 'Сергей' AND c.CustomerSecondName = 'Волков' AND m.ModelName = '911' THEN '2024-06-22'
+            WHEN c.CustomerFirstName = 'Ольга' AND c.CustomerSecondName = 'Лебедева' AND m.ModelName = 'RX' THEN '2024-04-30'
+            WHEN c.CustomerFirstName = 'Михаил' AND c.CustomerSecondName = 'Павлов' AND m.ModelName = 'Mustang' THEN '2024-02-14'
+            WHEN c.CustomerFirstName = 'Татьяна' AND c.CustomerSecondName = 'Егорова' AND m.ModelName = 'Model 3' THEN '2024-05-25'
+            WHEN c.CustomerFirstName = 'Андрей' AND c.CustomerSecondName = 'Григорьев' AND m.ModelName = 'Golf' THEN '2024-03-08'
+            WHEN c.CustomerFirstName = 'Наталья' AND c.CustomerSecondName = 'Романова' AND m.ModelName = 'A4' THEN '2024-06-01'
         END AS PurchaseDate,
         CASE 
             WHEN m.ModelName = 'X5' THEN 8500000.00
@@ -319,18 +320,18 @@ USING (
     FROM Customers c
     CROSS JOIN Models m
     WHERE 
-        (c.CustomerName = 'Иван Петров' AND m.ModelName = 'X5') OR
-        (c.CustomerName = 'Мария Сидорова' AND m.ModelName = 'Camry') OR
-        (c.CustomerName = 'Алексей Козлов' AND m.ModelName = 'Model S') OR
-        (c.CustomerName = 'Елена Новикова' AND m.ModelName = 'Tucson') OR
-        (c.CustomerName = 'Дмитрий Соколов' AND m.ModelName = 'Sportage') OR
-        (c.CustomerName = 'Анна Морозова' AND m.ModelName = 'XC90') OR
-        (c.CustomerName = 'Сергей Волков' AND m.ModelName = '911') OR
-        (c.CustomerName = 'Ольга Лебедева' AND m.ModelName = 'RX') OR
-        (c.CustomerName = 'Михаил Павлов' AND m.ModelName = 'Mustang') OR
-        (c.CustomerName = 'Татьяна Егорова' AND m.ModelName = 'Model 3') OR
-        (c.CustomerName = 'Андрей Григорьев' AND m.ModelName = 'Golf') OR
-        (c.CustomerName = 'Наталья Романова' AND m.ModelName = 'A4')
+        (c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5') OR
+        (c.CustomerFirstName = 'Мария' AND c.CustomerSecondName = 'Сидорова' AND m.ModelName = 'Camry') OR
+        (c.CustomerFirstName = 'Алексей' AND c.CustomerSecondName = 'Козлов' AND m.ModelName = 'Model S') OR
+        (c.CustomerFirstName = 'Елена' AND c.CustomerSecondName = 'Новикова' AND m.ModelName = 'Tucson') OR
+        (c.CustomerFirstName = 'Дмитрий' AND c.CustomerSecondName = 'Соколов' AND m.ModelName = 'Sportage') OR
+        (c.CustomerFirstName = 'Анна' AND c.CustomerSecondName = 'Морозова' AND m.ModelName = 'XC90') OR
+        (c.CustomerFirstName = 'Сергей' AND c.CustomerSecondName = 'Волков' AND m.ModelName = '911') OR
+        (c.CustomerFirstName = 'Ольга' AND c.CustomerSecondName = 'Лебедева' AND m.ModelName = 'RX') OR
+        (c.CustomerFirstName = 'Михаил' AND c.CustomerSecondName = 'Павлов' AND m.ModelName = 'Mustang') OR
+        (c.CustomerFirstName = 'Татьяна' AND c.CustomerSecondName = 'Егорова' AND m.ModelName = 'Model 3') OR
+        (c.CustomerFirstName = 'Андрей' AND c.CustomerSecondName = 'Григорьев' AND m.ModelName = 'Golf') OR
+        (c.CustomerFirstName = 'Наталья' AND c.CustomerSecondName = 'Романова' AND m.ModelName = 'A4')
 ) AS source
 ON target.$from_id = source.from_id AND target.$to_id = source.to_id
 WHEN NOT MATCHED THEN
@@ -356,11 +357,11 @@ GO
 -- ЗАПРОС 2: Найти клиентов, купивших модели всех марок
 -- Цепочка: Customers -> PURCHASED_BY -> Models <- BELONGS_TO - Brands
 SELECT 
-    C.CustomerName AS [Клиент],
+    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
     COUNT(DISTINCT B.BrandName) AS [Количество купленных марок]
 FROM Customers C, PURCHASED_BY PB, Models M, BELONGS_TO BT, Brands B
 WHERE MATCH(C-(PB)->M<-(BT)-B)
-GROUP BY C.CustomerName
+GROUP BY C.CustomerFirstName, C.CustomerSecondName
 HAVING COUNT(DISTINCT B.BrandName) = (SELECT COUNT(*) FROM Brands)
 ORDER BY [Количество купленных марок] DESC;
 GO
@@ -380,15 +381,15 @@ GO
 
 -- ЗАПРОС 4: Найти модели, которые может обслужить сервисный центр 
 -- в том же городе, где живёт клиент, купивший эту модель
--- Цепочка: Customers -> PURCHASED_BY -> Models <- BELONGS_TO - Brands <- SERVES_BRAND - ServiceCenters
+-- Цепочка: Customers -> PURCHASED_BY -> Models <- BELONGS_TO - Brands <- SERVES - ServiceCenters
 SELECT DISTINCT
     M.ModelName AS [Модель],
     B.BrandName AS [Марка],
-    C.CustomerName AS [Клиент],
+    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
     C.City AS [Город клиента],
     SC.CenterName AS [Сервисный центр],
     SC.Specialization AS [Специализация сервиса]
-FROM Customers C, PURCHASED_BY PB, Models M, BELONGS_TO BT, Brands B, SERVES_BRAND SB, ServiceCenters SC
+FROM Customers C, PURCHASED_BY PB, Models M, BELONGS_TO BT, Brands B, SERVES SB, ServiceCenters SC
 WHERE MATCH(C-(PB)->M<-(BT)-B<-(SB)-SC)
     AND C.City = SC.City
 ORDER BY C.City, B.BrandName;
@@ -406,7 +407,7 @@ FROM Brands B, Models M, BELONGS_TO BT, PURCHASED_BY PB, Customers C
 WHERE MATCH(B<-(BT)-M<-(PB)-C)
     AND NOT EXISTS (
         SELECT 1
-        FROM ServiceCenters SC, SERVES_BRAND SB
+        FROM ServiceCenters SC, SERVES SB
         WHERE MATCH(SC-(SB)->B)
             AND SC.City = C.City
             AND SB.SpecializationLevel = 'Официальный дилер'
@@ -421,7 +422,7 @@ GO
 -- Использование шаблона "+" (один или более шагов)
 -- Требуется: LAST_NODE, STRING_AGG, FOR PATH
 SELECT 
-    C.CustomerName AS [Клиент],
+    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
     STRING_AGG(NodeName.value('(/n/text())[1]', 'NVARCHAR(100)'), ' -> ') WITHIN GROUP (GRAPH PATH) AS [Путь],
     LAST_VALUE(M.ModelName) WITHIN GROUP (GRAPH PATH) AS [Купленная модель],
     LAST_VALUE(B.BrandName) WITHIN GROUP (GRAPH PATH) AS [Бренд]
@@ -433,15 +434,15 @@ FROM
     BELONGS_TO BT FOR PATH
 WHERE 
     MATCH(SHORTEST_PATH(C(-(PB)->M)+(-(BT)->B)))
-    AND C.CustomerName = 'Иван Петров'
-GROUP BY C.CustomerName, LAST_NODE(M).ModelName, LAST_NODE(B).BrandName;
+    AND C.CustomerFirstName = 'Иван' AND C.CustomerSecondName = 'Петров'
+GROUP BY C.CustomerFirstName, C.CustomerSecondName, LAST_NODE(M).ModelName, LAST_NODE(B).BrandName;
 GO
 
 -- ЗАПРОС 2: Найти все марки, доступные через сервисные центры 
 -- на расстоянии от 1 до 3 шагов от клиента
 -- Использование шаблона "{1,3}"
 SELECT 
-    C.CustomerName AS [Клиент],
+    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
     C.City AS [Город],
     STRING_AGG(NodeName.value('(/n/text())[1]', 'NVARCHAR(100)'), ' => ') WITHIN GROUP (GRAPH PATH) AS [Цепочка доступа],
     LAST_VALUE(SC.CenterName) WITHIN GROUP (GRAPH PATH) AS [Сервисный центр],
@@ -454,15 +455,16 @@ FROM
     PURCHASED_BY PB FOR PATH,
     Models M FOR PATH,
     BELONGS_TO BT FOR PATH,
-    SERVES_BRAND SB FOR PATH
+    SERVES SB FOR PATH
 WHERE 
     MATCH(SHORTEST_PATH(C(-(PB)->M<-(BT)-B<-(SB)-SC){1,3}))
     AND C.City = SC.City
 GROUP BY 
-    C.CustomerName, 
+    C.CustomerFirstName,
+    C.CustomerSecondName, 
     C.City,
     LAST_NODE(SC).CenterName,
     LAST_NODE(B).BrandName,
     LAST_NODE(SB).SpecializationLevel
-ORDER BY C.CustomerName, [Доступная марка];
+ORDER BY CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName), [Доступная марка];
 GO
