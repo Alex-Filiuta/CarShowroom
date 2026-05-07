@@ -168,176 +168,165 @@ GO
 
 -- Заполнение ServiceCenters
 INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Specialization, OpenTime, CloseTime, Rating, IsOfficialDealer) VALUES
-('АвтоПремиум Москва', 'ул. Ленинградский проспект, 39', '+7 495 123-45-67', 'info@autopremium.ru', 'Москва', 'Официальный дилер премиум-брендов', '09:00', '20:00', 4.8, 1),
-('Тойота Центр СПб', 'пр. Энгельса, 154', '+7 812 234-56-78', 'service@toyota-spb.ru', 'Санкт-Петербург', 'Официальный дилер Toyota', '08:00', '21:00', 4.9, 1),
-('ЭлектроАвто Сервис', 'ул. Новая, 25', '+7 495 345-67-89', 'ev@electroauto.ru', 'Москва', 'Специализированный сервис по электромобилям', '10:00', '19:00', 4.6, 0),
-('Немецкое Качество', 'ш. Ярославское, 120', '+7 495 456-78-90', 'info@germanquality.ru', 'Москва', 'Авторизованный сервис BMW, Mercedes, Audi', '09:00', '20:00', 4.7, 0),
-('АвтоСити Екатеринбург', 'ул. Малышева, 51', '+7 343 567-89-01', 'service@autocity-ekb.ru', 'Екатеринбург', 'Универсальный сервис', '09:00', '19:00', 4.3, 0),
-('Корейские Авто Новосибирск', 'ул. Красный проспект, 82', '+7 383 678-90-12', 'info@koreanauto-nsk.ru', 'Новосибирск', 'Официальный дилер Hyundai, Kia', '09:00', '20:00', 4.5, 1),
-('Вольво Центр Казань', 'пр. Победы, 141', '+7 843 789-01-23', 'service@volvo-kzn.ru', 'Казань', 'Официальный дилер Volvo', '09:00', '18:00', 4.8, 1),
-('Порше Центр Сочи', 'ул. Навагинская, 11', '+7 862 890-12-34', 'info@porsche-sochi.ru', 'Сочи', 'Официальный дилер Porsche', '10:00', '19:00', 4.9, 1),
-('АвтоМастер Краснодар', 'ул. Красная, 176', '+7 861 901-23-45', 'service@avtomaster-krd.ru', 'Краснодар', 'Специализированный ремонт', '09:00', '18:00', 4.2, 0),
-('Тесла Сервис Москва', 'ул. Тестовская, 10', '+7 495 012-34-56', 'service@tesla-msk.ru', 'Москва', 'Официальный сервисный центр Tesla', '09:00', '21:00', 4.9, 1),
-('Форд Центр Ростов', 'пр. Михаила Нагибина, 32', '+7 863 123-45-67', 'info@ford-rostov.ru', 'Ростов-на-Дону', 'Официальный дилер Ford', '09:00', '20:00', 4.6, 1),
-('АвтоЭксперт Воронеж', 'ул. Плехановская, 45', '+7 473 234-56-78', 'service@autoexpert-vrn.ru', 'Воронеж', 'Универсальный сервис', '09:00', '19:00', 4.4, 0);
+('АвтоПремиум Минск', 'пр-т Независимости, 95', '+375 17 234-56-78', 'info@autopremium.by', 'Минск', 'Официальный дилер премиум-брендов', '09:00', '20:00', 4.8, 1),
+('Тойота Центр Гомель', 'ул. Советская, 120', '+375 232 45-67-89', 'service@toyota-gomel.by', 'Гомель', 'Официальный дилер Toyota', '08:00', '21:00', 4.9, 1),
+('ЭлектроАвто Сервис', 'ул. Новая, 25', '+375 17 345-67-89', 'ev@electroauto.by', 'Минск', 'Специализированный сервис по электромобилям', '10:00', '19:00', 4.6, 0),
+('Немецкое Качество', 'пр-т Победителей, 120', '+375 17 456-78-90', 'info@germanquality.by', 'Минск', 'Авторизованный сервис BMW, Mercedes, Audi', '09:00', '20:00', 4.7, 0),
+('АвтоСити Брест', 'ул. Московская, 51', '+375 162 56-78-90', 'service@autocity-brest.by', 'Брест', 'Универсальный сервис', '09:00', '19:00', 4.3, 0),
+('Корейские Авто Витебск', 'пр-т Фрунзе, 82', '+375 212 67-89-01', 'info@koreanauto-vitebsk.by', 'Витебск', 'Официальный дилер Hyundai, Kia', '09:00', '20:00', 4.5, 1),
+('Вольво Центр Гродно', 'ул. Горького, 141', '+375 152 78-90-12', 'service@volvo-grodno.by', 'Гродно', 'Официальный дилер Volvo', '09:00', '18:00', 4.8, 1),
+('Порше Центр Минск', 'ул. Немига, 11', '+375 17 890-12-34', 'info@porsche-minsk.by', 'Минск', 'Официальный дилер Porsche', '10:00', '19:00', 4.9, 1),
+('АвтоМастер Могилев', 'ул. Ленинская, 176', '+375 222 90-12-34', 'service@avtomaster-mogilev.by', 'Могилев', 'Специализированный ремонт', '09:00', '18:00', 4.2, 0),
+('Тесла Сервис Минск', 'ул. Тимирязева, 10', '+375 17 012-34-56', 'service@tesla-minsk.by', 'Минск', 'Официальный сервисный центр Tesla', '09:00', '21:00', 4.9, 1),
+('Форд Центр Бобруйск', 'ул. Социалистическая, 32', '+375 241 12-34-56', 'info@ford-bobruisk.by', 'Бобруйск', 'Официальный дилер Ford', '09:00', '20:00', 4.6, 1),
+('АвтоЭксперт Барановичи', 'ул. Советская, 45', '+375 163 23-45-67', 'service@autoexpert-baranovichi.by', 'Барановичи', 'Универсальный сервис', '09:00', '19:00', 4.4, 0);
 GO
 
 -- Заполнение Customers
 INSERT INTO Customers (CustomerFirstName, CustomerSecondName, Email, PhoneNumber, City, RegistrationDate, LoyaltyLevel) VALUES
-('Иван', 'Петров', 'ivan.petrov@email.ru', '+7 916 111-22-33', 'Москва', '2023-01-15', 'Gold'),
-('Мария', 'Сидорова', 'maria.sidorova@email.ru', '+7 926 222-33-44', 'Санкт-Петербург', '2023-02-20', 'Silver'),
-('Алексей', 'Козлов', 'alexey.kozlov@email.ru', '+7 903 333-44-55', 'Москва', '2023-03-10', 'Platinum'),
-('Елена', 'Новикова', 'elena.novikova@email.ru', '+7 985 444-55-66', 'Екатеринбург', '2023-04-05', 'Bronze'),
-('Дмитрий', 'Соколов', 'dmitry.sokolov@email.ru', '+7 912 555-66-77', 'Новосибирск', '2023-05-12', 'Silver'),
-('Анна', 'Морозова', 'anna.morozova@email.ru', '+7 918 666-77-88', 'Казань', '2023-06-18', 'Gold'),
-('Сергей', 'Волков', 'sergey.volkov@email.ru', '+7 987 777-88-99', 'Сочи', '2023-07-22', 'Bronze'),
-('Ольга', 'Лебедева', 'olga.lebedeva@email.ru', '+7 921 888-99-00', 'Москва', '2023-08-30', 'Platinum'),
-('Михаил', 'Павлов', 'mikhail.pavlov@email.ru', '+7 961 999-00-11', 'Краснодар', '2023-09-14', 'Silver'),
-('Татьяна', 'Егорова', 'tatyana.egorova@email.ru', '+7 909 000-11-22', 'Ростов-на-Дону', '2023-10-25', 'Gold'),
-('Андрей', 'Григорьев', 'andrey.grigoriev@email.ru', '+7 915 111-22-33', 'Воронеж', '2023-11-08', 'Bronze'),
-('Наталья', 'Романова', 'natalya.romanova@email.ru', '+7 927 222-33-44', 'Москва', '2023-12-01', 'Silver');
+('Иван', 'Петров', 'ivan.petrov@gmail.com', '+375 29 111-22-33', 'Минск', '2023-01-15', 'Gold'),
+('Мария', 'Сидорова', 'maria.sidorova@gmail.com', '+375 29 222-33-44', 'Гомель', '2023-02-20', 'Silver'),
+('Алексей', 'Козлов', 'alexey.kozlov@gmail.com', '+375 29 333-44-55', 'Минск', '2023-03-10', 'Platinum'),
+('Елена', 'Новикова', 'elena.novikova@gmail.com', '+375 29 444-55-66', 'Брест', '2023-04-05', 'Bronze'),
+('Дмитрий', 'Соколов', 'dmitry.sokolov@gmail.com', '+375 29 555-66-77', 'Витебск', '2023-05-12', 'Silver'),
+('Анна', 'Морозова', 'anna.morozova@gmail.com', '+375 29 666-77-88', 'Гродно', '2023-06-18', 'Gold'),
+('Сергей', 'Волков', 'sergey.volkov@gmail.com', '+375 29 777-88-99', 'Могилев', '2023-07-22', 'Bronze'),
+('Ольга', 'Лебедева', 'olga.lebedeva@gmail.com', '+375 29 888-99-00', 'Минск', '2023-08-30', 'Platinum'),
+('Михаил', 'Павлов', 'mikhail.pavlov@gmail.com', '+375 29 999-00-11', 'Бобруйск', '2023-09-14', 'Silver'),
+('Татьяна', 'Егорова', 'tatyana.egorova@gmail.com', '+375 29 000-11-22', 'Барановичи', '2023-10-25', 'Gold'),
+('Андрей', 'Григорьев', 'andrey.grigoriev@gmail.com', '+375 29 111-22-33', 'Пинск', '2023-11-08', 'Bronze'),
+('Наталья', 'Романова', 'natalya.romanova@gmail.com', '+375 29 222-33-44', 'Минск', '2023-12-01', 'Silver');
 GO
 
 --Заполнение таблиц рёбер
 
 -- Заполнение BELONGS_TO: связь Моделей с Марками
-MERGE BELONGS_TO AS target
-USING (
-    SELECT 
-        m.$node_id AS from_id,
-        b.$node_id AS to_id,
-        CASE 
-            WHEN m.ModelName = 'X5' THEN '1999-01-01'
-            WHEN m.ModelName = 'Camry' THEN '1982-01-01'
-            WHEN m.ModelName = 'Model S' THEN '2012-01-01'
-            WHEN m.ModelName = 'A4' THEN '1994-01-01'
-            WHEN m.ModelName = 'Golf' THEN '1974-01-01'
-            WHEN m.ModelName = 'Mustang' THEN '1964-01-01'
-            WHEN m.ModelName = 'Tucson' THEN '2004-01-01'
-            WHEN m.ModelName = 'XC90' THEN '2002-01-01'
-            WHEN m.ModelName = '911' THEN '1963-01-01'
-            WHEN m.ModelName = 'RX' THEN '1998-01-01'
-            WHEN m.ModelName = 'Sportage' THEN '1993-01-01'
-            WHEN m.ModelName = 'Model 3' THEN '2017-01-01'
-        END AS StartDate
-    FROM Models m
-    CROSS JOIN Brands b
-    WHERE 
-        (m.ModelName = 'X5' AND b.BrandName = 'BMW') OR
-        (m.ModelName = 'Camry' AND b.BrandName = 'Toyota') OR
-        (m.ModelName = 'Model S' AND b.BrandName = 'Tesla') OR
-        (m.ModelName = 'A4' AND b.BrandName = 'Audi') OR
-        (m.ModelName = 'Golf' AND b.BrandName = 'Volkswagen') OR
-        (m.ModelName = 'Mustang' AND b.BrandName = 'Ford') OR
-        (m.ModelName = 'Tucson' AND b.BrandName = 'Hyundai') OR
-        (m.ModelName = 'XC90' AND b.BrandName = 'Volvo') OR
-        (m.ModelName = '911' AND b.BrandName = 'Porsche') OR
-        (m.ModelName = 'RX' AND b.BrandName = 'Lexus') OR
-        (m.ModelName = 'Sportage' AND b.BrandName = 'Kia') OR
-        (m.ModelName = 'Model 3' AND b.BrandName = 'Tesla')
-) AS source
-ON target.$from_id = source.from_id AND target.$to_id = source.to_id
-WHEN NOT MATCHED THEN
-    INSERT ($from_id, $to_id, StartDate, IsCurrentModel)
-    VALUES (source.from_id, source.to_id, source.StartDate, 1);
+INSERT INTO BELONGS_TO ($from_id, $to_id, StartDate, IsCurrentModel)
+SELECT 
+    m.$node_id AS from_id,
+    b.$node_id AS to_id,
+    CASE 
+        WHEN m.ModelName = 'X5' THEN '1999-01-01'
+        WHEN m.ModelName = 'Camry' THEN '1982-01-01'
+        WHEN m.ModelName = 'Model S' THEN '2012-01-01'
+        WHEN m.ModelName = 'A4' THEN '1994-01-01'
+        WHEN m.ModelName = 'Golf' THEN '1974-01-01'
+        WHEN m.ModelName = 'Mustang' THEN '1964-01-01'
+        WHEN m.ModelName = 'Tucson' THEN '2004-01-01'
+        WHEN m.ModelName = 'XC90' THEN '2002-01-01'
+        WHEN m.ModelName = '911' THEN '1963-01-01'
+        WHEN m.ModelName = 'RX' THEN '1998-01-01'
+        WHEN m.ModelName = 'Sportage' THEN '1993-01-01'
+        WHEN m.ModelName = 'Model 3' THEN '2017-01-01'
+    END AS StartDate,
+    1 AS IsCurrentModel
+FROM Models m
+JOIN Brands b ON 
+    (m.ModelName = 'X5' AND b.BrandName = 'BMW') OR
+    (m.ModelName = 'Camry' AND b.BrandName = 'Toyota') OR
+    (m.ModelName = 'Model S' AND b.BrandName = 'Tesla') OR
+    (m.ModelName = 'A4' AND b.BrandName = 'Audi') OR
+    (m.ModelName = 'Golf' AND b.BrandName = 'Volkswagen') OR
+    (m.ModelName = 'Mustang' AND b.BrandName = 'Ford') OR
+    (m.ModelName = 'Tucson' AND b.BrandName = 'Hyundai') OR
+    (m.ModelName = 'XC90' AND b.BrandName = 'Volvo') OR
+    (m.ModelName = '911' AND b.BrandName = 'Porsche') OR
+    (m.ModelName = 'RX' AND b.BrandName = 'Lexus') OR
+    (m.ModelName = 'Sportage' AND b.BrandName = 'Kia') OR
+    (m.ModelName = 'Model 3' AND b.BrandName = 'Tesla');
 GO
 
 -- Заполнение SERVES: связь Сервисных центров с Марками
-MERGE SERVES AS target
-USING (
-    SELECT 
-        sc.$node_id AS from_id,
-        b.$node_id AS to_id,
-        CASE 
-            WHEN sc.CenterName = 'АвтоПремиум Москва' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi', 'Porsche') THEN 'Официальный дилер'
-            WHEN sc.CenterName = 'Тойота Центр СПб' AND b.BrandName = 'Toyota' THEN 'Официальный дилер'
-            WHEN sc.CenterName = 'ЭлектроАвто Сервис' AND b.BrandName = 'Tesla' THEN 'Специализированный ремонт'
-            WHEN sc.CenterName = 'Немецкое Качество' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi') THEN 'Авторизованный сервис'
-            WHEN sc.CenterName = 'Корейские Авто Новосибирск' AND b.BrandName IN ('Hyundai', 'Kia') THEN 'Официальный дилер'
-            WHEN sc.CenterName = 'Вольво Центр Казань' AND b.BrandName = 'Volvo' THEN 'Официальный дилер'
-            WHEN sc.CenterName = 'Порше Центр Сочи' AND b.BrandName = 'Porsche' THEN 'Официальный дилер'
-            WHEN sc.CenterName = 'Тесла Сервис Москва' AND b.BrandName = 'Tesla' THEN 'Официальный дилер'
-            WHEN sc.CenterName = 'Форд Центр Ростов' AND b.BrandName = 'Ford' THEN 'Официальный дилер'
-            ELSE 'Универсальный'
-        END AS SpecializationLevel,
-        '2023-01-01' AS ContractStartDate
-    FROM ServiceCenters sc
-    CROSS JOIN Brands b
-    WHERE 
-        (sc.CenterName = 'АвтоПремиум Москва' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi', 'Porsche')) OR
-        (sc.CenterName = 'Тойота Центр СПб' AND b.BrandName = 'Toyota') OR
-        (sc.CenterName = 'ЭлектроАвто Сервис' AND b.BrandName = 'Tesla') OR
-        (sc.CenterName = 'Немецкое Качество' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi')) OR
-        (sc.CenterName = 'АвтоСити Екатеринбург') OR
-        (sc.CenterName = 'Корейские Авто Новосибирск' AND b.BrandName IN ('Hyundai', 'Kia')) OR
-        (sc.CenterName = 'Вольво Центр Казань' AND b.BrandName = 'Volvo') OR
-        (sc.CenterName = 'Порше Центр Сочи' AND b.BrandName = 'Porsche') OR
-        (sc.CenterName = 'АвтоМастер Краснодар') OR
-        (sc.CenterName = 'Тесла Сервис Москва' AND b.BrandName = 'Tesla') OR
-        (sc.CenterName = 'Форд Центр Ростов' AND b.BrandName = 'Ford') OR
-        (sc.CenterName = 'АвтоЭксперт Воронеж')
-) AS source
-ON target.$from_id = source.from_id AND target.$to_id = source.to_id
-WHEN NOT MATCHED THEN
-    INSERT ($from_id, $to_id, SpecializationLevel, ContractStartDate, ServiceQualityRating)
-    VALUES (source.from_id, source.to_id, source.SpecializationLevel, source.ContractStartDate, 
-            CASE WHEN source.SpecializationLevel = 'Официальный дилер' THEN 4.8 ELSE 4.3 END);
+INSERT INTO SERVES ($from_id, $to_id, SpecializationLevel, ContractStartDate, ServiceQualityRating)
+SELECT 
+    sc.$node_id AS from_id,
+    b.$node_id AS to_id,
+    CASE 
+        WHEN sc.CenterName = 'АвтоПремиум Минск' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi', 'Porsche') THEN 'Официальный дилер'
+        WHEN sc.CenterName = 'Тойота Центр Гомель' AND b.BrandName = 'Toyota' THEN 'Официальный дилер'
+        WHEN sc.CenterName = 'ЭлектроАвто Сервис' AND b.BrandName = 'Tesla' THEN 'Специализированный ремонт'
+        WHEN sc.CenterName = 'Немецкое Качество' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi') THEN 'Авторизованный сервис'
+        WHEN sc.CenterName = 'Корейские Авто Витебск' AND b.BrandName IN ('Hyundai', 'Kia') THEN 'Официальный дилер'
+        WHEN sc.CenterName = 'Вольво Центр Гродно' AND b.BrandName = 'Volvo' THEN 'Официальный дилер'
+        WHEN sc.CenterName = 'Порше Центр Минск' AND b.BrandName = 'Porsche' THEN 'Официальный дилер'
+        WHEN sc.CenterName = 'Тесла Сервис Минск' AND b.BrandName = 'Tesla' THEN 'Официальный дилер'
+        WHEN sc.CenterName = 'Форд Центр Бобруйск' AND b.BrandName = 'Ford' THEN 'Официальный дилер'
+        ELSE 'Универсальный'
+    END AS SpecializationLevel,
+    '2023-01-01' AS ContractStartDate,
+    CASE 
+        WHEN sc.CenterName = 'АвтоПремиум Минск' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi', 'Porsche') THEN 4.8
+        WHEN sc.CenterName = 'Тойота Центр Гомель' AND b.BrandName = 'Toyota' THEN 4.8
+        WHEN sc.CenterName = 'Корейские Авто Витебск' AND b.BrandName IN ('Hyundai', 'Kia') THEN 4.8
+        WHEN sc.CenterName = 'Вольво Центр Гродно' AND b.BrandName = 'Volvo' THEN 4.8
+        WHEN sc.CenterName = 'Порше Центр Минск' AND b.BrandName = 'Porsche' THEN 4.8
+        WHEN sc.CenterName = 'Тесла Сервис Минск' AND b.BrandName = 'Tesla' THEN 4.8
+        WHEN sc.CenterName = 'Форд Центр Бобруйск' AND b.BrandName = 'Ford' THEN 4.8
+        ELSE 4.3
+    END AS ServiceQualityRating
+FROM ServiceCenters sc
+JOIN Brands b ON 
+    (sc.CenterName = 'АвтоПремиум Минск' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi', 'Porsche')) OR
+    (sc.CenterName = 'Тойота Центр Гомель' AND b.BrandName = 'Toyota') OR
+    (sc.CenterName = 'ЭлектроАвто Сервис' AND b.BrandName = 'Tesla') OR
+    (sc.CenterName = 'Немецкое Качество' AND b.BrandName IN ('BMW', 'Mercedes-Benz', 'Audi')) OR
+    (sc.CenterName = 'АвтоСити Брест') OR
+    (sc.CenterName = 'Корейские Авто Витебск' AND b.BrandName IN ('Hyundai', 'Kia')) OR
+    (sc.CenterName = 'Вольво Центр Гродно' AND b.BrandName = 'Volvo') OR
+    (sc.CenterName = 'Порше Центр Минск' AND b.BrandName = 'Porsche') OR
+    (sc.CenterName = 'АвтоМастер Могилев') OR
+    (sc.CenterName = 'Тесла Сервис Минск' AND b.BrandName = 'Tesla') OR
+    (sc.CenterName = 'Форд Центр Бобруйск' AND b.BrandName = 'Ford') OR
+    (sc.CenterName = 'АвтоЭксперт Барановичи');
 GO
 
 -- Заполнение PURCHASED_BY: связь Клиентов с Моделями
-MERGE PURCHASED_BY AS target
-USING (
-    SELECT 
-        c.$node_id AS from_id,
-        m.$node_id AS to_id,
-        CASE 
-            WHEN c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5' THEN '2024-03-15'
-            WHEN c.CustomerFirstName = 'Мария' AND c.CustomerSecondName = 'Сидорова' AND m.ModelName = 'Camry' THEN '2024-02-20'
-            WHEN c.CustomerFirstName = 'Алексей' AND c.CustomerSecondName = 'Козлов' AND m.ModelName = 'Model S' THEN '2024-04-10'
-            WHEN c.CustomerFirstName = 'Елена' AND c.CustomerSecondName = 'Новикова' AND m.ModelName = 'Tucson' THEN '2024-01-25'
-            WHEN c.CustomerFirstName = 'Дмитрий' AND c.CustomerSecondName = 'Соколов' AND m.ModelName = 'Sportage' THEN '2024-05-12'
-            WHEN c.CustomerFirstName = 'Анна' AND c.CustomerSecondName = 'Морозова' AND m.ModelName = 'XC90' THEN '2024-03-18'
-            WHEN c.CustomerFirstName = 'Сергей' AND c.CustomerSecondName = 'Волков' AND m.ModelName = '911' THEN '2024-06-22'
-            WHEN c.CustomerFirstName = 'Ольга' AND c.CustomerSecondName = 'Лебедева' AND m.ModelName = 'RX' THEN '2024-04-30'
-            WHEN c.CustomerFirstName = 'Михаил' AND c.CustomerSecondName = 'Павлов' AND m.ModelName = 'Mustang' THEN '2024-02-14'
-            WHEN c.CustomerFirstName = 'Татьяна' AND c.CustomerSecondName = 'Егорова' AND m.ModelName = 'Model 3' THEN '2024-05-25'
-            WHEN c.CustomerFirstName = 'Андрей' AND c.CustomerSecondName = 'Григорьев' AND m.ModelName = 'Golf' THEN '2024-03-08'
-            WHEN c.CustomerFirstName = 'Наталья' AND c.CustomerSecondName = 'Романова' AND m.ModelName = 'A4' THEN '2024-06-01'
-        END AS PurchaseDate,
-        CASE 
-            WHEN m.ModelName = 'X5' THEN 8500000.00
-            WHEN m.ModelName = 'Camry' THEN 3500000.00
-            WHEN m.ModelName = 'Model S' THEN 12000000.00
-            WHEN m.ModelName = 'Tucson' THEN 2800000.00
-            WHEN m.ModelName = 'Sportage' THEN 2600000.00
-            WHEN m.ModelName = 'XC90' THEN 7200000.00
-            WHEN m.ModelName = '911' THEN 11500000.00
-            WHEN m.ModelName = 'RX' THEN 6100000.00
-            WHEN m.ModelName = 'Mustang' THEN 5800000.00
-            WHEN m.ModelName = 'Model 3' THEN 5500000.00
-            WHEN m.ModelName = 'Golf' THEN 2100000.00
-            WHEN m.ModelName = 'A4' THEN 4200000.00
-        END AS PurchasePrice
-    FROM Customers c
-    CROSS JOIN Models m
-    WHERE 
-        (c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5') OR
-        (c.CustomerFirstName = 'Мария' AND c.CustomerSecondName = 'Сидорова' AND m.ModelName = 'Camry') OR
-        (c.CustomerFirstName = 'Алексей' AND c.CustomerSecondName = 'Козлов' AND m.ModelName = 'Model S') OR
-        (c.CustomerFirstName = 'Елена' AND c.CustomerSecondName = 'Новикова' AND m.ModelName = 'Tucson') OR
-        (c.CustomerFirstName = 'Дмитрий' AND c.CustomerSecondName = 'Соколов' AND m.ModelName = 'Sportage') OR
-        (c.CustomerFirstName = 'Анна' AND c.CustomerSecondName = 'Морозова' AND m.ModelName = 'XC90') OR
-        (c.CustomerFirstName = 'Сергей' AND c.CustomerSecondName = 'Волков' AND m.ModelName = '911') OR
-        (c.CustomerFirstName = 'Ольга' AND c.CustomerSecondName = 'Лебедева' AND m.ModelName = 'RX') OR
-        (c.CustomerFirstName = 'Михаил' AND c.CustomerSecondName = 'Павлов' AND m.ModelName = 'Mustang') OR
-        (c.CustomerFirstName = 'Татьяна' AND c.CustomerSecondName = 'Егорова' AND m.ModelName = 'Model 3') OR
-        (c.CustomerFirstName = 'Андрей' AND c.CustomerSecondName = 'Григорьев' AND m.ModelName = 'Golf') OR
-        (c.CustomerFirstName = 'Наталья' AND c.CustomerSecondName = 'Романова' AND m.ModelName = 'A4')
-) AS source
-ON target.$from_id = source.from_id AND target.$to_id = source.to_id
-WHEN NOT MATCHED THEN
-    INSERT ($from_id, $to_id, PurchaseDate, PurchasePrice, PaymentMethod, WarrantyYears)
-    VALUES (source.from_id, source.to_id, source.PurchaseDate, source.PurchasePrice, 'Кредит', 3);
+INSERT INTO PURCHASED_BY ($from_id, $to_id, PurchaseDate, PurchasePrice, PaymentMethod, WarrantyYears)
+SELECT 
+    c.$node_id AS from_id,
+    m.$node_id AS to_id,
+    CASE 
+        WHEN c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5' THEN '2024-03-15'
+        WHEN c.CustomerFirstName = 'Мария' AND c.CustomerSecondName = 'Сидорова' AND m.ModelName = 'Camry' THEN '2024-02-20'
+        WHEN c.CustomerFirstName = 'Алексей' AND c.CustomerSecondName = 'Козлов' AND m.ModelName = 'Model S' THEN '2024-04-10'
+        WHEN c.CustomerFirstName = 'Елена' AND c.CustomerSecondName = 'Новикова' AND m.ModelName = 'Tucson' THEN '2024-01-25'
+        WHEN c.CustomerFirstName = 'Дмитрий' AND c.CustomerSecondName = 'Соколов' AND m.ModelName = 'Sportage' THEN '2024-05-12'
+        WHEN c.CustomerFirstName = 'Анна' AND c.CustomerSecondName = 'Морозова' AND m.ModelName = 'XC90' THEN '2024-03-18'
+        WHEN c.CustomerFirstName = 'Сергей' AND c.CustomerSecondName = 'Волков' AND m.ModelName = '911' THEN '2024-06-22'
+        WHEN c.CustomerFirstName = 'Ольга' AND c.CustomerSecondName = 'Лебедева' AND m.ModelName = 'RX' THEN '2024-04-30'
+        WHEN c.CustomerFirstName = 'Михаил' AND c.CustomerSecondName = 'Павлов' AND m.ModelName = 'Mustang' THEN '2024-02-14'
+        WHEN c.CustomerFirstName = 'Татьяна' AND c.CustomerSecondName = 'Егорова' AND m.ModelName = 'Model 3' THEN '2024-05-25'
+        WHEN c.CustomerFirstName = 'Андрей' AND c.CustomerSecondName = 'Григорьев' AND m.ModelName = 'Golf' THEN '2024-03-08'
+        WHEN c.CustomerFirstName = 'Наталья' AND c.CustomerSecondName = 'Романова' AND m.ModelName = 'A4' THEN '2024-06-01'
+    END AS PurchaseDate,
+    CASE 
+        WHEN m.ModelName = 'X5' THEN 8500000.00
+        WHEN m.ModelName = 'Camry' THEN 3500000.00
+        WHEN m.ModelName = 'Model S' THEN 12000000.00
+        WHEN m.ModelName = 'Tucson' THEN 2800000.00
+        WHEN m.ModelName = 'Sportage' THEN 2600000.00
+        WHEN m.ModelName = 'XC90' THEN 7200000.00
+        WHEN m.ModelName = '911' THEN 11500000.00
+        WHEN m.ModelName = 'RX' THEN 6100000.00
+        WHEN m.ModelName = 'Mustang' THEN 5800000.00
+        WHEN m.ModelName = 'Model 3' THEN 5500000.00
+        WHEN m.ModelName = 'Golf' THEN 2100000.00
+        WHEN m.ModelName = 'A4' THEN 4200000.00
+    END AS PurchasePrice
+FROM Customers c
+JOIN Models m ON 
+    (c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5') OR
+    (c.CustomerFirstName = 'Мария' AND c.CustomerSecondName = 'Сидорова' AND m.ModelName = 'Camry') OR
+    (c.CustomerFirstName = 'Алексей' AND c.CustomerSecondName = 'Козлов' AND m.ModelName = 'Model S') OR
+    (c.CustomerFirstName = 'Елена' AND c.CustomerSecondName = 'Новикова' AND m.ModelName = 'Tucson') OR
+    (c.CustomerFirstName = 'Дмитрий' AND c.CustomerSecondName = 'Соколов' AND m.ModelName = 'Sportage') OR
+    (c.CustomerFirstName = 'Анна' AND c.CustomerSecondName = 'Морозова' AND m.ModelName = 'XC90') OR
+    (c.CustomerFirstName = 'Сергей' AND c.CustomerSecondName = 'Волков' AND m.ModelName = '911') OR
+    (c.CustomerFirstName = 'Ольга' AND c.CustomerSecondName = 'Лебедева' AND m.ModelName = 'RX') OR
+    (c.CustomerFirstName = 'Михаил' AND c.CustomerSecondName = 'Павлов' AND m.ModelName = 'Mustang') OR
+    (c.CustomerFirstName = 'Татьяна' AND c.CustomerSecondName = 'Егорова' AND m.ModelName = 'Model 3') OR
+    (c.CustomerFirstName = 'Андрей' AND c.CustomerSecondName = 'Григорьев' AND m.ModelName = 'Golf') OR
+    (c.CustomerFirstName = 'Наталья' AND c.CustomerSecondName = 'Романова' AND m.ModelName = 'A4');
 GO
 
 --Запросы с функцией MATCH
