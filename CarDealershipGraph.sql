@@ -3,7 +3,7 @@
 USE master;
 GO
 
-IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'CarDealershipGraph')
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = N'CarDealershipGraph')
 BEGIN
     ALTER DATABASE CarDealershipGraph SET single_user WITH ROLLBACK IMMEDIATE;
     DROP DATABASE CarDealershipGraph;
@@ -71,7 +71,7 @@ CREATE TABLE Customers (
     PhoneNumber NVARCHAR(20),
     City NVARCHAR(100),
     RegistrationDate DATE DEFAULT GETDATE(),
-    LoyaltyLevel NVARCHAR(50) CHECK (LoyaltyLevel IN ('Bronze','Silver','Gold','Platinum'))
+    LoyaltyLevel NVARCHAR(50) CHECK (LoyaltyLevel IN (N'Bronze',N'Silver',N'Gold',N'Platinum'))
 ) AS NODE;
 GO
 
@@ -127,7 +127,7 @@ GO
 ALTER TABLE PURCHASES 
 ADD PurchaseDate DATE NOT NULL DEFAULT GETDATE(),
     PurchasePrice DECIMAL(12,2),
-    PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Наличные', 'Банковская карта')),
+    PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN (N'Наличные', N'Банковская карта')),
     WarrantyYears INT,
     IsTradeIn BIT DEFAULT 0;
 GO
@@ -136,72 +136,72 @@ GO
 
 -- Заполнение Brands
 INSERT INTO Brands (BrandName, CountryOfOrigin, YearFounded, Website, IsManufacturerActive, Description) VALUES
-('BMW', 'Germany', 1916, 'https://www.bmw.com', 1, N'Премиальные автомобили с акцентом на динамику'),
-('Mercedes-Benz', 'Germany', 1926, 'https://www.mercedes-benz.com', 1, N'Роскошные автомобили и коммерческий транспорт'),
-('Toyota', 'Japan', 1937, 'https://www.toyota.com', 1, N'Надёжные автомобили массового сегмента'),
-('Tesla', 'USA', 2003, 'https://www.tesla.com', 1, N'Инновационные электромобили и энергетические решения'),
-('Audi', 'Germany', 1909, 'https://www.audi.com', 1, N'Технологичные премиальные автомобили'),
-('Volkswagen', 'Germany', 1937, 'https://www.volkswagen.com', 1, N'Автомобили для широкой аудитории'),
-('Ford', 'USA', 1903, 'https://www.ford.com', 1, N'Американский автопроизводитель с богатой историей'),
-('Hyundai', 'South Korea', 1967, 'https://www.hyundai.com', 1, N'Современные автомобили с отличным соотношением цены и качества'),
-('Volvo', 'Sweden', 1927, 'https://www.volvo.com', 1, N'Безопасность и скандинавский дизайн'),
-('Porsche', 'Germany', 1931, 'https://www.porsche.com', 1, N'Спортивные автомобили премиум-класса'),
-('Lexus', 'Japan', 1989, 'https://www.lexus.com', 1, N'Премиальное подразделение Toyota'),
-('Kia', 'South Korea', 1944, 'https://www.kia.com', 1, N'Динамично развивающийся корейский бренд');
+(N'BMW', N'Germany', 1916, N'https://www.bmw.com', 1, N'Премиальные автомобили с акцентом на динамику'),
+(N'Mercedes-Benz', N'Germany', 1926, N'https://www.mercedes-benz.com', 1, N'Роскошные автомобили и коммерческий транспорт'),
+(N'Toyota', N'Japan', 1937, N'https://www.toyota.com', 1, N'Надёжные автомобили массового сегмента'),
+(N'Tesla', N'USA', 2003, N'https://www.tesla.com', 1, N'Инновационные электромобили и энергетические решения'),
+(N'Audi', N'Germany', 1909, N'https://www.audi.com', 1, N'Технологичные премиальные автомобили'),
+(N'Volkswagen', N'Germany', 1937, N'https://www.volkswagen.com', 1, N'Автомобили для широкой аудитории'),
+(N'Ford', N'USA', 1903, N'https://www.ford.com', 1, N'Американский автопроизводитель с богатой историей'),
+(N'Hyundai', N'South Korea', 1967, N'https://www.hyundai.com', 1, N'Современные автомобили с отличным соотношением цены и качества'),
+(N'Volvo', N'Sweden', 1927, N'https://www.volvo.com', 1, N'Безопасность и скандинавский дизайн'),
+(N'Porsche', N'Germany', 1931, N'https://www.porsche.com', 1, N'Спортивные автомобили премиум-класса'),
+(N'Lexus', N'Japan', 1989, N'https://www.lexus.com', 1, N'Премиальное подразделение Toyota'),
+(N'Kia', N'South Korea', 1944, N'https://www.kia.com', 1, N'Динамично развивающийся корейский бренд');
 GO
 
 SELECT * FROM Brands
 
 -- Заполнение Models
 INSERT INTO Models (ModelName, ProductionStartYear, ProductionEndYear, BodyType, EngineType, Horsepower, FuelConsumption, TransmissionType, BasePrice, IsElectric, SafetyRating) VALUES
-('X5', 1999, NULL, 'Внедорожник', 'Бензиновый', 340, 11.5, 'Автомат', 8500000.00, 0, 4.8),
-('Camry', 1982, NULL, 'Седан', 'Бензиновый', 203, 8.6, 'Автомат', 3500000.00, 0, 4.9),
-('Model S', 2012, NULL, 'Седан', 'Электрический', 670, 0, 'Автомат', 12000000.00, 1, 5.0),
-('A4', 1994, NULL, 'Седан', 'Бензиновый', 249, 7.8, 'Автомат', 4200000.00, 0, 4.7),
-('Golf', 1974, NULL, 'Хэтчбек', 'Бензиновый', 150, 6.4, 'Механика', 2100000.00, 0, 4.6),
-('Mustang', 1964, NULL, 'Купе', 'Бензиновый', 450, 13.2, 'Автомат', 5800000.00, 0, 4.3),
-('Tucson', 2004, NULL, 'Внедорожник', 'Бензиновый', 150, 8.9, 'Автомат', 2800000.00, 0, 4.5),
-('XC90', 2002, NULL, 'Внедорожник', 'Гибрид', 310, 2.1, 'Автомат', 7200000.00, 0, 5.0),
-('911', 1963, NULL, 'Купе', 'Бензиновый', 450, 11.1, 'Робот', 11500000.00, 0, 4.4),
-('RX', 1998, NULL, 'Внедорожник', 'Гибрид', 313, 5.8, 'Автомат', 6100000.00, 0, 4.8),
-('Sportage', 1993, NULL, 'Внедорожник', 'Бензиновый', 150, 9.1, 'Автомат', 2600000.00, 0, 4.4),
-('Model 3', 2017, NULL, 'Седан', 'Электрический', 283, 0, 'Автомат', 5500000.00, 1, 5.0);
+(N'X5', 1999, NULL, N'Внедорожник', N'Бензиновый', 340, 11.5, N'Автомат', 8500000.00, 0, 4.8),
+(N'Camry', 1982, NULL, N'Седан', N'Бензиновый', 203, 8.6, N'Автомат', 3500000.00, 0, 4.9),
+(N'Model S', 2012, NULL, N'Седан', N'Электрический', 670, 0, N'Автомат', 12000000.00, 1, 5.0),
+(N'A4', 1994, NULL, N'Седан', N'Бензиновый', 249, 7.8, N'Автомат', 4200000.00, 0, 4.7),
+(N'Golf', 1974, NULL, N'Хэтчбек', N'Бензиновый', 150, 6.4, N'Механика', 2100000.00, 0, 4.6),
+(N'Mustang', 1964, NULL, N'Купе', N'Бензиновый', 450, 13.2, N'Автомат', 5800000.00, 0, 4.3),
+(N'Tucson', 2004, NULL, N'Внедорожник', N'Бензиновый', 150, 8.9, N'Автомат', 2800000.00, 0, 4.5),
+(N'XC90', 2002, NULL, N'Внедорожник', N'Гибрид', 310, 2.1, N'Автомат', 7200000.00, 0, 5.0),
+(N'911', 1963, NULL, N'Купе', N'Бензиновый', 450, 11.1, N'Робот', 11500000.00, 0, 4.4),
+(N'RX', 1998, NULL, N'Внедорожник', N'Гибрид', 313, 5.8, N'Автомат', 6100000.00, 0, 4.8),
+(N'Sportage', 1993, NULL, N'Внедорожник', N'Бензиновый', 150, 9.1, N'Автомат', 2600000.00, 0, 4.4),
+(N'Model 3', 2017, NULL, N'Седан', N'Электрический', 283, 0, N'Автомат', 5500000.00, 1, 5.0);
 GO
 
 SELECT * FROM Models
 
 -- Заполнение ServiceCenters
 INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Specialization, OpenTime, CloseTime, Rating, IsOfficialDealer) VALUES
-('АвтоПремиум Минск', 'пр-т Независимости, 95', '+375 17 234-56-78', 'info@autopremium.by', 'Минск', 'Официальный дилер премиум-брендов', '09:00', '20:00', 4.8, 1),
-('Тойота Центр Гомель', 'ул. Советская, 120', '+375 232 45-67-89', 'service@toyota-gomel.by', 'Гомель', 'Официальный дилер Toyota', '08:00', '21:00', 4.9, 1),
-('ЭлектроАвто Сервис', 'ул. Новая, 25', '+375 17 345-67-89', 'ev@electroauto.by', 'Минск', 'Специализированный сервис по электромобилям', '10:00', '19:00', 4.6, 0),
-('Немецкое Качество', 'пр-т Победителей, 120', '+375 17 456-78-90', 'info@germanquality.by', 'Минск', 'Авторизованный сервис BMW, Mercedes, Audi', '09:00', '20:00', 4.7, 0),
-('АвтоСити Брест', 'ул. Московская, 51', '+375 162 56-78-90', 'service@autocity-brest.by', 'Брест', 'Универсальный сервис', '09:00', '19:00', 4.3, 0),
-('Корейские Авто Витебск', 'пр-т Фрунзе, 82', '+375 212 67-89-01', 'info@koreanauto-vitebsk.by', 'Витебск', 'Официальный дилер Hyundai, Kia', '09:00', '20:00', 4.5, 1),
-('Вольво Центр Гродно', 'ул. Горького, 141', '+375 152 78-90-12', 'service@volvo-grodno.by', 'Гродно', 'Официальный дилер Volvo', '09:00', '18:00', 4.8, 1),
-('Порше Центр Минск', 'ул. Немига, 11', '+375 17 890-12-34', 'info@porsche-minsk.by', 'Минск', 'Официальный дилер Porsche', '10:00', '19:00', 4.9, 1),
-('АвтоМастер Могилев', 'ул. Ленинская, 176', '+375 222 90-12-34', 'service@avtomaster-mogilev.by', 'Могилев', 'Специализированный ремонт', '09:00', '18:00', 4.2, 0),
-('Тесла Сервис Минск', 'ул. Тимирязева, 10', '+375 17 012-34-56', 'service@tesla-minsk.by', 'Минск', 'Официальный сервисный центр Tesla', '09:00', '21:00', 4.9, 1),
-('Форд Центр Бобруйск', 'ул. Социалистическая, 32', '+375 241 12-34-56', 'info@ford-bobruisk.by', 'Бобруйск', 'Официальный дилер Ford', '09:00', '20:00', 4.6, 1),
-('АвтоЭксперт Барановичи', 'ул. Советская, 45', '+375 163 23-45-67', 'service@autoexpert-baranovichi.by', 'Барановичи', 'Универсальный сервис', '09:00', '19:00', 4.4, 0);
+(N'АвтоПремиум Минск', N'пр-т Независимости, 95', N'+375 17 234-56-78', N'info@autopremium.by', N'Минск', N'Официальный дилер премиум-брендов', N'09:00', N'20:00', 4.8, 1),
+(N'Тойота Центр Гомель', N'ул. Советская, 120', N'+375 232 45-67-89', N'service@toyota-gomel.by', N'Гомель', N'Официальный дилер Toyota', N'08:00', N'21:00', 4.9, 1),
+(N'ЭлектроАвто Сервис', N'ул. Новая, 25', N'+375 17 345-67-89', N'ev@electroauto.by', N'Минск', N'Специализированный сервис по электромобилям', N'10:00', N'19:00', 4.6, 0),
+(N'Немецкое Качество', N'пр-т Победителей, 120', N'+375 17 456-78-90', N'info@germanquality.by', N'Минск', N'Авторизованный сервис BMW, Mercedes, Audi', N'09:00', N'20:00', 4.7, 0),
+(N'АвтоСити Брест', N'ул. Московская, 51', N'+375 162 56-78-90', N'service@autocity-brest.by', N'Брест', N'Универсальный сервис', N'09:00', N'19:00', 4.3, 0),
+(N'Корейские Авто Витебск', N'пр-т Фрунзе, 82', N'+375 212 67-89-01', N'info@koreanauto-vitebsk.by', N'Витебск', N'Официальный дилер Hyundai, Kia', N'09:00', N'20:00', 4.5, 1),
+(N'Вольво Центр Гродно', N'ул. Горького, 141', N'+375 152 78-90-12', N'service@volvo-grodno.by', N'Гродно', N'Официальный дилер Volvo', N'09:00', N'18:00', 4.8, 1),
+(N'Порше Центр Минск', N'ул. Немига, 11', N'+375 17 890-12-34', N'info@porsche-minsk.by', N'Минск', N'Официальный дилер Porsche', N'10:00', N'19:00', 4.9, 1),
+(N'АвтоМастер Могилев', N'ул. Ленинская, 176', N'+375 222 90-12-34', N'service@avtomaster-mogilev.by', N'Могилев', N'Специализированный ремонт', N'09:00', N'18:00', 4.2, 0),
+(N'Тесла Сервис Минск', N'ул. Тимирязева, 10', N'+375 17 012-34-56', N'service@tesla-minsk.by', N'Минск', N'Официальный сервисный центр Tesla', N'09:00', N'21:00', 4.9, 1),
+(N'Форд Центр Бобруйск', N'ул. Социалистическая, 32', N'+375 241 12-34-56', N'info@ford-bobruisk.by', N'Бобруйск', N'Официальный дилер Ford', N'09:00', N'20:00', 4.6, 1),
+(N'АвтоЭксперт Барановичи', N'ул. Советская, 45', N'+375 163 23-45-67', N'service@autoexpert-baranovichi.by', N'Барановичи', N'Универсальный сервис', N'09:00', N'19:00', 4.4, 0);
 GO
 
 SELECT * FROM ServiceCenters
 
 -- Заполнение Customers
 INSERT INTO Customers (CustomerFirstName, CustomerSecondName, Email, PhoneNumber, City, RegistrationDate, LoyaltyLevel) VALUES
-('Иван', 'Петров', 'ivan.petrov@gmail.com', '+375 29 111-22-33', 'Минск', '2023-01-15', 'Gold'),
-('Мария', 'Сидорова', 'maria.sidorova@gmail.com', '+375 29 222-33-44', 'Гомель', '2023-02-20', 'Silver'),
-('Алексей', 'Козлов', 'alexey.kozlov@gmail.com', '+375 29 333-44-55', 'Минск', '2023-03-10', 'Platinum'),
-('Елена', 'Новикова', 'elena.novikova@gmail.com', '+375 29 444-55-66', 'Брест', '2023-04-05', 'Bronze'),
-('Дмитрий', 'Соколов', 'dmitry.sokolov@gmail.com', '+375 29 555-66-77', 'Витебск', '2023-05-12', 'Silver'),
-('Анна', 'Морозова', 'anna.morozova@gmail.com', '+375 29 666-77-88', 'Гродно', '2023-06-18', 'Gold'),
-('Сергей', 'Волков', 'sergey.volkov@gmail.com', '+375 29 777-88-99', 'Могилев', '2023-07-22', 'Bronze'),
-('Ольга', 'Лебедева', 'olga.lebedeva@gmail.com', '+375 29 888-99-00', 'Минск', '2023-08-30', 'Platinum'),
-('Михаил', 'Павлов', 'mikhail.pavlov@gmail.com', '+375 29 999-00-11', 'Бобруйск', '2023-09-14', 'Silver'),
-('Татьяна', 'Егорова', 'tatyana.egorova@gmail.com', '+375 29 000-11-22', 'Барановичи', '2023-10-25', 'Gold'),
-('Андрей', 'Григорьев', 'andrey.grigoriev@gmail.com', '+375 29 111-22-33', 'Пинск', '2023-11-08', 'Bronze'),
-('Наталья', 'Романова', 'natalya.romanova@gmail.com', '+375 29 222-33-44', 'Минск', '2023-12-01', 'Silver');
+(N'Иван', N'Петров', N'ivan.petrov@gmail.com', N'+375 29 111-22-33', N'Минск', '2023-01-15', N'Gold'),
+(N'Мария', N'Сидорова', N'maria.sidorova@gmail.com', N'+375 29 222-33-44', N'Гомель', '2023-02-20', N'Silver'),
+(N'Алексей', N'Козлов', N'alexey.kozlov@gmail.com', N'+375 29 333-44-55', N'Минск', '2023-03-10', N'Platinum'),
+(N'Елена', N'Новикова', N'elena.novikova@gmail.com', N'+375 29 444-55-66', N'Брест', '2023-04-05', N'Bronze'),
+(N'Дмитрий', N'Соколов', N'dmitry.sokolov@gmail.com', N'+375 29 555-66-77', N'Витебск', '2023-05-12', N'Silver'),
+(N'Анна', N'Морозова', N'anna.morozova@gmail.com', N'+375 29 666-77-88', N'Гродно', '2023-06-18', N'Gold'),
+(N'Сергей', N'Волков', N'sergey.volkov@gmail.com', N'+375 29 777-88-99', N'Могилев', '2023-07-22', N'Bronze'),
+(N'Ольга', N'Лебедева', N'olga.lebedeva@gmail.com', N'+375 29 888-99-00', N'Минск', '2023-08-30', N'Platinum'),
+(N'Михаил', N'Павлов', N'mikhail.pavlov@gmail.com', N'+375 29 999-00-11', N'Бобруйск', '2023-09-14', N'Silver'),
+(N'Татьяна', N'Егорова', N'tatyana.egorova@gmail.com', N'+375 29 000-11-22', N'Барановичи', '2023-10-25', N'Gold'),
+(N'Андрей', N'Григорьев', N'andrey.grigoriev@gmail.com', N'+375 29 111-22-33', N'Пинск', '2023-11-08', N'Bronze'),
+(N'Наталья', N'Романова', N'natalya.romanova@gmail.com', N'+375 29 222-33-44', N'Минск', '2023-12-01', N'Silver');
 GO
 
 SELECT * FROM Customers
@@ -320,7 +320,7 @@ SELECT * FROM PURCHASES
 
 -- 1. Найти клиентов, купивших электромобили, и вывести их имя, модель, марку и страну производителя.
 SELECT
-    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
+    c.CustomerFirstName + N' ' + c.CustomerSecondName AS [Клиент],
     m.ModelName AS [Модель],
     b.BrandName AS [Марка],
     b.CountryOfOrigin AS [Страна]
@@ -355,7 +355,7 @@ GO
 
 -- 4. Найти клиентов с уровнем лояльности Gold или Platinum, купивших автомобили с рейтингом безопасности ≥ 4.8 марки BMW.
 SELECT
-    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
+    c.CustomerFirstName + N' ' + c.CustomerSecondName AS [Клиент],
     c.LoyaltyLevel AS [Уровень лояльности],
     b.BrandName AS [Марка],
     m.ModelName AS [Модель],
@@ -372,7 +372,7 @@ GO
 SELECT DISTINCT
     b.BrandName AS [Марка],
     c.City AS [Город клиента],
-    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент]
+    c.CustomerFirstName + N' ' + c.CustomerSecondName AS [Клиент]
 FROM Customers c, PURCHASES p, Models m, BELONGS_TO bt, Brands b
 WHERE MATCH(c-(p)->m-(bt)->b)
   AND NOT EXISTS (
@@ -391,8 +391,8 @@ GO
 WITH PathToBrands AS
 (
     SELECT
-        c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
-        STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Цепочка_моделей],
+        c.CustomerFirstName + N' ' + c.CustomerSecondName AS [Клиент],
+        STRING_AGG(m.ModelName, N' -> ') WITHIN GROUP (GRAPH PATH) AS [Цепочка_моделей],
         LAST_VALUE(b.BrandName) WITHIN GROUP (GRAPH PATH) AS [Конечная_марка]
     FROM
         Customers AS c,
@@ -412,8 +412,8 @@ GO
 -- 2. Найти кратчайший путь от марки «Tesla» к клиентам длиной от 1 до 3 шагов, вывести имена всех промежуточных моделей и конечного клиента.
 SELECT 
     b.BrandName AS [Марка],
-    STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Промежуточные_модели],
-    LAST_VALUE(c.CustomerFirstName) WITHIN GROUP (GRAPH PATH) + ' ' + LAST_VALUE(c.CustomerSecondName) WITHIN GROUP (GRAPH PATH) AS [Конечный_клиент]
+    STRING_AGG(m.ModelName, N' -> ') WITHIN GROUP (GRAPH PATH) AS [Промежуточные_модели],
+    LAST_VALUE(c.CustomerFirstName) WITHIN GROUP (GRAPH PATH) + N' ' + LAST_VALUE(c.CustomerSecondName) WITHIN GROUP (GRAPH PATH) AS [Конечный_клиент]
 FROM 
     Brands b,
     Models FOR PATH AS m,
@@ -428,4 +428,4 @@ GO
 SELECT @@VERSION;  -- версия сервера
 SELECT name, compatibility_level
 FROM sys.databases
-WHERE name = 'CarDealershipGraph';
+WHERE name = N'CarDealershipGraph';
