@@ -312,7 +312,16 @@ SELECT
         WHEN m.ModelName = 'Model 3' THEN 5500000.00
         WHEN m.ModelName = 'Golf' THEN 2100000.00
         WHEN m.ModelName = 'A4' THEN 4200000.00
-    END AS PurchasePrice
+    END AS PurchasePrice,
+    CASE 
+        WHEN m.ModelName IN ('X5', 'Model S', '911', 'XC90') THEN 'Банковская карта'
+        ELSE 'Наличные'
+    END AS PaymentMethod,
+    CASE 
+        WHEN m.ModelName IN ('Model S', 'Model 3') THEN 5
+        WHEN m.ModelName IN ('X5', 'XC90', 'RX', '911') THEN 4
+        ELSE 3
+    END AS WarrantyYears
 FROM Customers c
 JOIN Models m ON 
     (c.CustomerFirstName = 'Иван' AND c.CustomerSecondName = 'Петров' AND m.ModelName = 'X5') OR
