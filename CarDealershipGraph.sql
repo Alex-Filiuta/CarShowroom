@@ -127,7 +127,7 @@ GO
 ALTER TABLE PURCHASED_BY 
 ADD PurchaseDate DATE NOT NULL DEFAULT GETDATE(),
     PurchasePrice DECIMAL(12,2),
-    PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Наличные', 'Банковская карта', 'Кредит', 'Лизинг', 'Trade-in')),
+    PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Наличные', 'Банковская карта')),
     WarrantyYears INT,
     IsTradeIn BIT DEFAULT 0;
 GO
