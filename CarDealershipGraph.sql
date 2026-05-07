@@ -1,7 +1,7 @@
 --Создание базы данных
 
 USE master;
-go
+GO
 
 IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'CarDealershipGraph')
 BEGIN
@@ -10,10 +10,10 @@ BEGIN
 END
 
 CREATE DATABASE CarDealershipGraph;
-go
+GO
 
 USE CarDealershipGraph;
-go
+GO
 
 --Создание таблиц узлов
 
@@ -107,7 +107,7 @@ GO
 
 ALTER TABLE SERVES 
 ADD SpecializationLevel NVARCHAR(50) 
-    CHECK (SpecializationLevel IN ('Официальный дилер', 'Авторизованный сервис', 'Специализированный ремонт', 'Универсальный')),
+    CHECK (SpecializationLevel IN (N'Официальный дилер', N'Авторизованный сервис', N'Специализированный ремонт', N'Универсальный')),
     ContractStartDate DATE,
     ContractEndDate DATE,
     ServiceQualityRating DECIMAL(3,2);
@@ -136,19 +136,21 @@ GO
 
 -- Заполнение Brands
 INSERT INTO Brands (BrandName, CountryOfOrigin, YearFounded, Website, IsManufacturerActive, Description) VALUES
-('BMW', 'Germany', 1916, 'https://www.bmw.com', 1, 'Премиальные автомобили с акцентом на динамику'),
-('Mercedes-Benz', 'Germany', 1926, 'https://www.mercedes-benz.com', 1, 'Роскошные автомобили и коммерческий транспорт'),
-('Toyota', 'Japan', 1937, 'https://www.toyota.com', 1, 'Надёжные автомобили массового сегмента'),
-('Tesla', 'USA', 2003, 'https://www.tesla.com', 1, 'Инновационные электромобили и энергетические решения'),
-('Audi', 'Germany', 1909, 'https://www.audi.com', 1, 'Технологичные премиальные автомобили'),
-('Volkswagen', 'Germany', 1937, 'https://www.volkswagen.com', 1, 'Автомобили для широкой аудитории'),
-('Ford', 'USA', 1903, 'https://www.ford.com', 1, 'Американский автопроизводитель с богатой историей'),
-('Hyundai', 'South Korea', 1967, 'https://www.hyundai.com', 1, 'Современные автомобили с отличным соотношением цены и качества'),
-('Volvo', 'Sweden', 1927, 'https://www.volvo.com', 1, 'Безопасность и скандинавский дизайн'),
-('Porsche', 'Germany', 1931, 'https://www.porsche.com', 1, 'Спортивные автомобили премиум-класса'),
-('Lexus', 'Japan', 1989, 'https://www.lexus.com', 1, 'Премиальное подразделение Toyota'),
-('Kia', 'South Korea', 1944, 'https://www.kia.com', 1, 'Динамично развивающийся корейский бренд');
+('BMW', 'Germany', 1916, 'https://www.bmw.com', 1, N'Премиальные автомобили с акцентом на динамику'),
+('Mercedes-Benz', 'Germany', 1926, 'https://www.mercedes-benz.com', 1, N'Роскошные автомобили и коммерческий транспорт'),
+('Toyota', 'Japan', 1937, 'https://www.toyota.com', 1, N'Надёжные автомобили массового сегмента'),
+('Tesla', 'USA', 2003, 'https://www.tesla.com', 1, N'Инновационные электромобили и энергетические решения'),
+('Audi', 'Germany', 1909, 'https://www.audi.com', 1, N'Технологичные премиальные автомобили'),
+('Volkswagen', 'Germany', 1937, 'https://www.volkswagen.com', 1, N'Автомобили для широкой аудитории'),
+('Ford', 'USA', 1903, 'https://www.ford.com', 1, N'Американский автопроизводитель с богатой историей'),
+('Hyundai', 'South Korea', 1967, 'https://www.hyundai.com', 1, N'Современные автомобили с отличным соотношением цены и качества'),
+('Volvo', 'Sweden', 1927, 'https://www.volvo.com', 1, N'Безопасность и скандинавский дизайн'),
+('Porsche', 'Germany', 1931, 'https://www.porsche.com', 1, N'Спортивные автомобили премиум-класса'),
+('Lexus', 'Japan', 1989, 'https://www.lexus.com', 1, N'Премиальное подразделение Toyota'),
+('Kia', 'South Korea', 1944, 'https://www.kia.com', 1, N'Динамично развивающийся корейский бренд');
 GO
+
+SELECT * FROM Brands
 
 -- Заполнение Models
 INSERT INTO Models (ModelName, ProductionStartYear, ProductionEndYear, BodyType, EngineType, Horsepower, FuelConsumption, TransmissionType, BasePrice, IsElectric, SafetyRating) VALUES
@@ -166,6 +168,8 @@ INSERT INTO Models (ModelName, ProductionStartYear, ProductionEndYear, BodyType,
 ('Model 3', 2017, NULL, 'Седан', 'Электрический', 283, 0, 'Автомат', 5500000.00, 1, 5.0);
 GO
 
+SELECT * FROM Models
+
 -- Заполнение ServiceCenters
 INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Specialization, OpenTime, CloseTime, Rating, IsOfficialDealer) VALUES
 ('АвтоПремиум Минск', 'пр-т Независимости, 95', '+375 17 234-56-78', 'info@autopremium.by', 'Минск', 'Официальный дилер премиум-брендов', '09:00', '20:00', 4.8, 1),
@@ -181,6 +185,8 @@ INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Speci
 ('Форд Центр Бобруйск', 'ул. Социалистическая, 32', '+375 241 12-34-56', 'info@ford-bobruisk.by', 'Бобруйск', 'Официальный дилер Ford', '09:00', '20:00', 4.6, 1),
 ('АвтоЭксперт Барановичи', 'ул. Советская, 45', '+375 163 23-45-67', 'service@autoexpert-baranovichi.by', 'Барановичи', 'Универсальный сервис', '09:00', '19:00', 4.4, 0);
 GO
+
+SELECT * FROM ServiceCenters
 
 -- Заполнение Customers
 INSERT INTO Customers (CustomerFirstName, CustomerSecondName, Email, PhoneNumber, City, RegistrationDate, LoyaltyLevel) VALUES
@@ -198,11 +204,11 @@ INSERT INTO Customers (CustomerFirstName, CustomerSecondName, Email, PhoneNumber
 ('Наталья', 'Романова', 'natalya.romanova@gmail.com', '+375 29 222-33-44', 'Минск', '2023-12-01', 'Silver');
 GO
 
+SELECT * FROM Customers
+
 --Заполнение таблиц рёбер
 
--- =============================================================================
 -- Заполнение BELONGS_TO (Модель → Марка)
--- =============================================================================
 INSERT INTO BELONGS_TO ($from_id, $to_id, StartDate, IsCurrentModel)
 SELECT m.$node_id, b.$node_id, v.StartDate, v.IsCurrentModel
 FROM (VALUES
@@ -223,9 +229,9 @@ JOIN Models m ON m.ModelName = v.ModelName
 JOIN Brands b ON b.BrandName = v.BrandName;
 GO
 
--- =============================================================================
+SELECT * FROM BELONGS_TO
+
 -- Заполнение SERVES (Сервисный центр → Марка)
--- =============================================================================
 INSERT INTO SERVES ($from_id, $to_id, SpecializationLevel, ContractStartDate, ServiceQualityRating)
 SELECT sc.$node_id, b.$node_id, v.Level, v.ContractStart, v.Rating
 FROM (VALUES
@@ -285,9 +291,9 @@ JOIN ServiceCenters sc ON sc.CenterName = v.CenterName
 JOIN Brands b ON b.BrandName = v.BrandName;
 GO
 
--- =============================================================================
+SELECT * FROM SERVES
+
 -- Заполнение PURCHASES (Клиент → Модель)
--- =============================================================================
 INSERT INTO PURCHASES ($from_id, $to_id, PurchaseDate, PurchasePrice, PaymentMethod, WarrantyYears, IsTradeIn)
 SELECT c.$node_id, m.$node_id, v.PurchaseDate, v.PurchasePrice, v.PaymentMethod, v.WarrantyYears, v.IsTradeIn
 FROM (VALUES
@@ -307,6 +313,8 @@ FROM (VALUES
 JOIN Customers c ON c.CustomerFirstName = v.FirstName AND c.CustomerSecondName = v.SecondName
 JOIN Models m ON m.ModelName = v.ModelName;
 GO
+
+SELECT * FROM PURCHASES
 
 --Запросы с функцией MATCH
 
@@ -380,37 +388,44 @@ GO
 -- Запросы с функцией SHORTEST_PATH
 
 -- 1. Найти кратчайший путь от клиента «Иван» к брендам через историю покупок, вывести цепочку моделей и название конечной марки.
-SELECT 
-    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
-    STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Путь_через_модели],
-    LAST_NODE(b).BrandName AS [Конечная_марка]
-FROM 
-    Customers c,
-    Models m FOR PATH,
-    Brands b FOR PATH,
-    PURCHASES p FOR PATH,
-    BELONGS_TO bt FOR PATH
-WHERE 
-    MATCH(SHORTEST_PATH(c(-(p)->m-(bt)->b)+))
-    AND c.CustomerFirstName = N'Иван'
-GROUP BY 
-    c.CustomerFirstName, c.CustomerSecondName;
+WITH PathToBrands AS
+(
+    SELECT
+        c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
+        STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Цепочка_моделей],
+        LAST_VALUE(b.BrandName) WITHIN GROUP (GRAPH PATH) AS [Конечная_марка]
+    FROM
+        Customers AS c,
+        PURCHASES FOR PATH AS p,
+        Models FOR PATH AS m,
+        BELONGS_TO FOR PATH AS bt,
+        Brands FOR PATH AS b
+    WHERE
+        MATCH(SHORTEST_PATH(c(-(p)->m-(bt)->b)+))
+        AND c.CustomerFirstName = N'Иван'
+)
+SELECT [Клиент], [Цепочка_моделей], [Конечная_марка]
+FROM PathToBrands
+WHERE [Конечная_марка] = N'BMW'; -- Фильтрация по LastNode, как в примере с Глебом
 GO
 
 -- 2. Найти кратчайший путь от марки «Tesla» к клиентам длиной от 1 до 3 шагов, вывести имена всех промежуточных моделей и конечного клиента.
 SELECT 
     b.BrandName AS [Марка],
     STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Промежуточные_модели],
-    LAST_NODE(c).CustomerFirstName + ' ' + LAST_NODE(c).CustomerSecondName AS [Конечный_клиент]
+    LAST_VALUE(c.CustomerFirstName) WITHIN GROUP (GRAPH PATH) + ' ' + LAST_VALUE(c.CustomerSecondName) WITHIN GROUP (GRAPH PATH) AS [Конечный_клиент]
 FROM 
     Brands b,
-    Models m FOR PATH,
-    Customers c FOR PATH,
-    BELONGS_TO bt FOR PATH,
-    PURCHASES p FOR PATH
+    Models FOR PATH AS m,
+    Customers FOR PATH AS c,
+    BELONGS_TO FOR PATH AS bt,
+    PURCHASES FOR PATH AS p
 WHERE 
     MATCH(SHORTEST_PATH((b <-(bt)- m <-(p)- c){1,3}))
-    AND b.BrandName = N'Tesla'
-GROUP BY 
-    b.BrandName;
+    AND b.BrandName = N'Tesla';
 GO
+
+SELECT @@VERSION;  -- версия сервера
+SELECT name, compatibility_level
+FROM sys.databases
+WHERE name = 'CarDealershipGraph';
