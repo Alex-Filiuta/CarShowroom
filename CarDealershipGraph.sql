@@ -310,130 +310,107 @@ GO
 
 --Запросы с функцией MATCH
 
--- ЗАПРОС 1: Найти самые старые модели у каждой марки
--- Цепочка: Brands <- BELONGS_TO - Models
-SELECT 
-    B.BrandName AS [Марка],
-    M.ModelName AS [Самая старая модель],
-    M.ProductionStartYear AS [Год начала выпуска]
-FROM Brands B, Models M, BELONGS_TO BT
-WHERE MATCH(B<-(BT)-M)
-GROUP BY B.BrandName, M.ModelName, M.ProductionStartYear
-HAVING M.ProductionStartYear = MIN(M.ProductionStartYear) OVER (PARTITION BY B.BrandName)
-ORDER BY M.ProductionStartYear;
+-- 1. Найти клиентов, купивших электромобили, и вывести их имя, модель, марку и страну производителя.
+SELECT
+    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
+    m.ModelName AS [Модель],
+    b.BrandName AS [Марка],
+    b.CountryOfOrigin AS [Страна]
+FROM Customers c, PURCHASES p, Models m, BELONGS_TO bt, Brands b
+WHERE MATCH(c-(p)->m-(bt)->b)
+  AND m.IsElectric = 1
+ORDER BY b.BrandName;
 GO
 
--- ЗАПРОС 2: Найти клиентов, купивших модели всех марок
--- Цепочка: Customers -> PURCHASES -> Models <- BELONGS_TO - Brands
-SELECT 
-    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
-    COUNT(DISTINCT B.BrandName) AS [Количество купленных марок]
-FROM Customers C, PURCHASES PB, Models M, BELONGS_TO BT, Brands B
-WHERE MATCH(C-(PB)->M<-(BT)-B)
-GROUP BY C.CustomerFirstName, C.CustomerSecondName
-HAVING COUNT(DISTINCT B.BrandName) = (SELECT COUNT(*) FROM Brands)
-ORDER BY [Количество купленных марок] DESC;
-GO
-
--- ЗАПРОС 3: Анализ популярности типов двигателей среди проданных авто
--- Цепочка: Customers -> PURCHASES -> Models
-SELECT 
-    M.EngineType AS [Тип двигателя],
-    COUNT(*) AS [Количество покупок],
-    AVG(M.BasePrice) AS [Средняя цена],
-    STRING_AGG(DISTINCT B.BrandName, ', ') AS [Бренды]
-FROM Customers C, PURCHASES PB, Models M, BELONGS_TO BT, Brands B
-WHERE MATCH(C-(PB)->M<-(BT)-B)
-GROUP BY M.EngineType
-ORDER BY [Количество покупок] DESC;
-GO
-
--- ЗАПРОС 4: Найти модели, которые может обслужить сервисный центр 
--- в том же городе, где живёт клиент, купивший эту модель
--- Цепочка: Customers -> PURCHASES -> Models <- BELONGS_TO - Brands <- SERVES - ServiceCenters
+-- 2. Найти сервисные центры в городе клиента, которые обслуживают марку его автомобиля.
 SELECT DISTINCT
-    M.ModelName AS [Модель],
-    B.BrandName AS [Марка],
-    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
-    C.City AS [Город клиента],
-    SC.CenterName AS [Сервисный центр],
-    SC.Specialization AS [Специализация сервиса]
-FROM Customers C, PURCHASES PB, Models M, BELONGS_TO BT, Brands B, SERVES SB, ServiceCenters SC
-WHERE MATCH(C-(PB)->M<-(BT)-B<-(SB)-SC)
-    AND C.City = SC.City
-ORDER BY C.City, B.BrandName;
+    sc.CenterName AS [Сервисный центр],
+    b.BrandName AS [Обслуживаемая марка],
+    s.SpecializationLevel AS [Тип обслуживания]
+FROM Customers c, PURCHASES p, Models m, BELONGS_TO bt, Brands b, SERVES s, ServiceCenters sc
+WHERE MATCH(c-(p)->m-(bt)->b<-(s)-sc)
+  AND c.City = sc.City
+ORDER BY sc.CenterName;
 GO
 
--- ЗАПРОС 5: Найти марки, не имеющие официальных дилеров в городах с клиентами
--- Цепочка: Customers -> PURCHASES -> Models <- BELONGS_TO - Brands
--- с проверкой отсутствия связи через сервисные центры
+-- 3. Рассчитать количество продаж и среднюю цену покупки для каждого типа кузова каждой марки.
+SELECT
+    b.BrandName AS [Марка],
+    m.BodyType AS [Тип кузова],
+    COUNT(*) AS [Количество продаж],
+    AVG(p.PurchasePrice) AS [Средняя цена]
+FROM Customers c, PURCHASES p, Models m, BELONGS_TO bt, Brands b
+WHERE MATCH(c-(p)->m-(bt)->b)
+GROUP BY b.BrandName, m.BodyType
+ORDER BY b.BrandName, [Средняя цена] DESC;
+GO
+
+-- 4. Найти клиентов с уровнем лояльности Gold или Platinum, купивших автомобили с рейтингом безопасности ≥ 4.8 марки BMW.
+SELECT
+    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
+    c.LoyaltyLevel AS [Уровень лояльности],
+    b.BrandName AS [Марка],
+    m.ModelName AS [Модель],
+    m.SafetyRating AS [Рейтинг безопасности]
+FROM Customers c, PURCHASES p, Models m, BELONGS_TO bt, Brands b
+WHERE MATCH(c-(p)->m-(bt)->b)
+  AND c.LoyaltyLevel IN (N'Platinum', N'Gold')
+  AND m.SafetyRating >= 4.8
+  AND b.BrandName = N'BMW'  -- ← добавлено
+ORDER BY m.SafetyRating DESC, m.ModelName ASC;
+GO
+
+-- 5. Выявить марки автомобилей, у которых нет официальных дилеров в городах проживания их покупателей.
 SELECT DISTINCT
-    B.BrandName AS [Марка без покрытия],
-    B.CountryOfOrigin AS [Страна],
-    C.City AS [Город с клиентами],
-    COUNT(DISTINCT C.CustomerID) AS [Количество клиентов в городе]
-FROM Brands B, Models M, BELONGS_TO BT, PURCHASES PB, Customers C
-WHERE MATCH(B<-(BT)-M<-(PB)-C)
-    AND NOT EXISTS (
-        SELECT 1
-        FROM ServiceCenters SC, SERVES SB
-        WHERE MATCH(SC-(SB)->B)
-            AND SC.City = C.City
-            AND SB.SpecializationLevel = 'Официальный дилер'
-    )
-GROUP BY B.BrandName, B.CountryOfOrigin, C.City
-ORDER BY [Количество клиентов в городе] DESC;
+    b.BrandName AS [Марка],
+    c.City AS [Город клиента],
+    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент]
+FROM Customers c, PURCHASES p, Models m, BELONGS_TO bt, Brands b
+WHERE MATCH(c-(p)->m-(bt)->b)
+  AND NOT EXISTS (
+      SELECT 1 FROM ServiceCenters sc, SERVES s
+      WHERE MATCH(sc-(s)->b)
+        AND sc.City = c.City
+        AND s.SpecializationLevel = N'Официальный дилер'
+  )
+ORDER BY b.BrandName, c.City;
 GO
 
---Запросы с функцией SHORTEST_PATH
 
--- ЗАПРОС 1: Найти кратчайший путь от клиента к бренду через покупки
--- Использование шаблона "+" (один или более шагов)
--- Требуется: LAST_NODE, STRING_AGG, FOR PATH
-SELECT 
-    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
-    STRING_AGG(NodeName.value('(/n/text())[1]', 'NVARCHAR(100)'), ' -> ') WITHIN GROUP (GRAPH PATH) AS [Путь],
-    LAST_VALUE(M.ModelName) WITHIN GROUP (GRAPH PATH) AS [Купленная модель],
-    LAST_VALUE(B.BrandName) WITHIN GROUP (GRAPH PATH) AS [Бренд]
-FROM 
-    Customers C,
-    Models M FOR PATH,
-    Brands B FOR PATH,
-    PURCHASES PB FOR PATH,
-    BELONGS_TO BT FOR PATH
-WHERE 
-    MATCH(SHORTEST_PATH(C(-(PB)->M)+(-(BT)->B)))
-    AND C.CustomerFirstName = 'Иван' AND C.CustomerSecondName = 'Петров'
-GROUP BY C.CustomerFirstName, C.CustomerSecondName, LAST_NODE(M).ModelName, LAST_NODE(B).BrandName;
-GO
+-- Запросы с функцией SHORTEST_PATH
 
--- ЗАПРОС 2: Найти все марки, доступные через сервисные центры 
--- на расстоянии от 1 до 3 шагов от клиента
--- Использование шаблона "{1,3}"
+-- 1. Найти кратчайший путь от клиента «Иван» к брендам через историю покупок, вывести цепочку моделей и название конечной марки.
 SELECT 
-    CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
-    C.City AS [Город],
-    STRING_AGG(NodeName.value('(/n/text())[1]', 'NVARCHAR(100)'), ' => ') WITHIN GROUP (GRAPH PATH) AS [Цепочка доступа],
-    LAST_VALUE(SC.CenterName) WITHIN GROUP (GRAPH PATH) AS [Сервисный центр],
-    LAST_VALUE(B.BrandName) WITHIN GROUP (GRAPH PATH) AS [Доступная марка],
-    LAST_VALUE(SB.SpecializationLevel) WITHIN GROUP (GRAPH PATH) AS [Тип сервиса]
+    c.CustomerFirstName + ' ' + c.CustomerSecondName AS [Клиент],
+    STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Путь_через_модели],
+    LAST_NODE(b).BrandName AS [Конечная_марка]
 FROM 
-    Customers C,
-    ServiceCenters SC FOR PATH,
-    Brands B FOR PATH,
-    PURCHASES PB FOR PATH,
-    Models M FOR PATH,
-    BELONGS_TO BT FOR PATH,
-    SERVES SB FOR PATH
+    Customers c,
+    Models m FOR PATH,
+    Brands b FOR PATH,
+    PURCHASES p FOR PATH,
+    BELONGS_TO bt FOR PATH
 WHERE 
-    MATCH(SHORTEST_PATH(C(-(PB)->M<-(BT)-B<-(SB)-SC){1,3}))
-    AND C.City = SC.City
+    MATCH(SHORTEST_PATH(c(-(p)->m-(bt)->b)+))
+    AND c.CustomerFirstName = N'Иван'
 GROUP BY 
-    C.CustomerFirstName,
-    C.CustomerSecondName, 
-    C.City,
-    LAST_NODE(SC).CenterName,
-    LAST_NODE(B).BrandName,
-    LAST_NODE(SB).SpecializationLevel
-ORDER BY CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName), [Доступная марка];
+    c.CustomerFirstName, c.CustomerSecondName;
+GO
+
+-- 2. Найти кратчайший путь от марки «Tesla» к клиентам длиной от 1 до 3 шагов, вывести имена всех промежуточных моделей и конечного клиента.
+SELECT 
+    b.BrandName AS [Марка],
+    STRING_AGG(m.ModelName, ' -> ') WITHIN GROUP (GRAPH PATH) AS [Промежуточные_модели],
+    LAST_NODE(c).CustomerFirstName + ' ' + LAST_NODE(c).CustomerSecondName AS [Конечный_клиент]
+FROM 
+    Brands b,
+    Models m FOR PATH,
+    Customers c FOR PATH,
+    BELONGS_TO bt FOR PATH,
+    PURCHASES p FOR PATH
+WHERE 
+    MATCH(SHORTEST_PATH((b <-(bt)- m <-(p)- c){1,3}))
+    AND b.BrandName = N'Tesla'
+GROUP BY 
+    b.BrandName;
 GO
