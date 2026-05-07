@@ -113,18 +113,18 @@ ADD SpecializationLevel NVARCHAR(50)
     ServiceQualityRating DECIMAL(3,2);
 GO
 
--- РЕБРО 3: PURCHASED_BY (Модель куплена Клиентом)
+-- РЕБРО 3: PURCHASES (Модель куплена Клиентом)
 -- Направление: Customers -> Models
-CREATE TABLE PURCHASED_BY AS EDGE;
+CREATE TABLE PURCHASES AS EDGE;
 GO
 
-ALTER TABLE PURCHASED_BY 
-ADD CONSTRAINT EC_PURCHASED_BY 
+ALTER TABLE PURCHASES 
+ADD CONSTRAINT EC_PURCHASES 
 CONNECTION (Customers TO Models)
 ON DELETE CASCADE;
 GO
 
-ALTER TABLE PURCHASED_BY 
+ALTER TABLE PURCHASES 
 ADD PurchaseDate DATE NOT NULL DEFAULT GETDATE(),
     PurchasePrice DECIMAL(12,2),
     PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Наличные', 'Банковская карта')),
@@ -298,9 +298,9 @@ JOIN Brands b ON b.BrandName = v.BrandName;
 GO
 
 -- =============================================================================
--- Заполнение PURCHASED_BY (Клиент → Модель)
+-- Заполнение PURCHASES (Клиент → Модель)
 -- =============================================================================
-INSERT INTO PURCHASED_BY ($from_id, $to_id, PurchaseDate, PurchasePrice, PaymentMethod, WarrantyYears, IsTradeIn)
+INSERT INTO PURCHASES ($from_id, $to_id, PurchaseDate, PurchasePrice, PaymentMethod, WarrantyYears, IsTradeIn)
 SELECT c.$node_id, m.$node_id, v.PurchaseDate, v.PurchasePrice, v.PaymentMethod, v.WarrantyYears, v.IsTradeIn
 FROM (VALUES
     (N'Иван',    N'Петров',    N'X5',       '2024-03-15', 8500000.00,  N'Банковская карта', 4, 1),
@@ -336,11 +336,11 @@ ORDER BY M.ProductionStartYear;
 GO
 
 -- ЗАПРОС 2: Найти клиентов, купивших модели всех марок
--- Цепочка: Customers -> PURCHASED_BY -> Models <- BELONGS_TO - Brands
+-- Цепочка: Customers -> PURCHASES -> Models <- BELONGS_TO - Brands
 SELECT 
     CONCAT(C.CustomerFirstName, ' ', C.CustomerSecondName) AS [Клиент],
     COUNT(DISTINCT B.BrandName) AS [Количество купленных марок]
-FROM Customers C, PURCHASED_BY PB, Models M, BELONGS_TO BT, Brands B
+FROM Customers C, PURCHASES PB, Models M, BELONGS_TO BT, Brands B
 WHERE MATCH(C-(PB)->M<-(BT)-B)
 GROUP BY C.CustomerFirstName, C.CustomerSecondName
 HAVING COUNT(DISTINCT B.BrandName) = (SELECT COUNT(*) FROM Brands)
@@ -348,13 +348,13 @@ ORDER BY [Количество купленных марок] DESC;
 GO
 
 -- ЗАПРОС 3: Анализ популярности типов двигателей среди проданных авто
--- Цепочка: Customers -> PURCHASED_BY -> Models
+-- Цепочка: Customers -> PURCHASES -> Models
 SELECT 
     M.EngineType AS [Тип двигателя],
     COUNT(*) AS [Количество покупок],
     AVG(M.BasePrice) AS [Средняя цена],
     STRING_AGG(DISTINCT B.BrandName, ', ') AS [Бренды]
-FROM Customers C, PURCHASED_BY PB, Models M, BELONGS_TO BT, Brands B
+FROM Customers C, PURCHASES PB, Models M, BELONGS_TO BT, Brands B
 WHERE MATCH(C-(PB)->M<-(BT)-B)
 GROUP BY M.EngineType
 ORDER BY [Количество покупок] DESC;
@@ -362,7 +362,7 @@ GO
 
 -- ЗАПРОС 4: Найти модели, которые может обслужить сервисный центр 
 -- в том же городе, где живёт клиент, купивший эту модель
--- Цепочка: Customers -> PURCHASED_BY -> Models <- BELONGS_TO - Brands <- SERVES - ServiceCenters
+-- Цепочка: Customers -> PURCHASES -> Models <- BELONGS_TO - Brands <- SERVES - ServiceCenters
 SELECT DISTINCT
     M.ModelName AS [Модель],
     B.BrandName AS [Марка],
@@ -370,21 +370,21 @@ SELECT DISTINCT
     C.City AS [Город клиента],
     SC.CenterName AS [Сервисный центр],
     SC.Specialization AS [Специализация сервиса]
-FROM Customers C, PURCHASED_BY PB, Models M, BELONGS_TO BT, Brands B, SERVES SB, ServiceCenters SC
+FROM Customers C, PURCHASES PB, Models M, BELONGS_TO BT, Brands B, SERVES SB, ServiceCenters SC
 WHERE MATCH(C-(PB)->M<-(BT)-B<-(SB)-SC)
     AND C.City = SC.City
 ORDER BY C.City, B.BrandName;
 GO
 
 -- ЗАПРОС 5: Найти марки, не имеющие официальных дилеров в городах с клиентами
--- Цепочка: Customers -> PURCHASED_BY -> Models <- BELONGS_TO - Brands
+-- Цепочка: Customers -> PURCHASES -> Models <- BELONGS_TO - Brands
 -- с проверкой отсутствия связи через сервисные центры
 SELECT DISTINCT
     B.BrandName AS [Марка без покрытия],
     B.CountryOfOrigin AS [Страна],
     C.City AS [Город с клиентами],
     COUNT(DISTINCT C.CustomerID) AS [Количество клиентов в городе]
-FROM Brands B, Models M, BELONGS_TO BT, PURCHASED_BY PB, Customers C
+FROM Brands B, Models M, BELONGS_TO BT, PURCHASES PB, Customers C
 WHERE MATCH(B<-(BT)-M<-(PB)-C)
     AND NOT EXISTS (
         SELECT 1
@@ -411,7 +411,7 @@ FROM
     Customers C,
     Models M FOR PATH,
     Brands B FOR PATH,
-    PURCHASED_BY PB FOR PATH,
+    PURCHASES PB FOR PATH,
     BELONGS_TO BT FOR PATH
 WHERE 
     MATCH(SHORTEST_PATH(C(-(PB)->M)+(-(BT)->B)))
@@ -433,7 +433,7 @@ FROM
     Customers C,
     ServiceCenters SC FOR PATH,
     Brands B FOR PATH,
-    PURCHASED_BY PB FOR PATH,
+    PURCHASES PB FOR PATH,
     Models M FOR PATH,
     BELONGS_TO BT FOR PATH,
     SERVES SB FOR PATH
