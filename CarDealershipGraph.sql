@@ -23,7 +23,7 @@ CREATE TABLE Brands (
     BrandName NVARCHAR(100) NOT NULL UNIQUE,
     CountryOfOrigin NVARCHAR(100),
     YearFounded SMALLINT,
-    Website NVARCHAR(255),
+    Website NVARCHAR(500),
     IsManufacturerActive BIT DEFAULT 1,
     Description NVARCHAR(500)
 ) AS NODE;
@@ -55,7 +55,8 @@ CREATE TABLE ServiceCenters (
     Email NVARCHAR(100),
     City NVARCHAR(100),
     Specialization NVARCHAR(255),
-    WorkingHours NVARCHAR(100),
+    OpenTime TIME,
+    CloseTime TIME,
     Rating DECIMAL(3,2),
     IsOfficialDealer BIT DEFAULT 0
 ) AS NODE;
@@ -70,13 +71,13 @@ CREATE TABLE Customers (
     PhoneNumber NVARCHAR(20),
     City NVARCHAR(100),
     RegistrationDate DATE DEFAULT GETDATE(),
-    LoyaltyLevel NVARCHAR(50)
+    LoyaltyLevel NVARCHAR(50) CHECK (LoyaltyLevel IN ('Bronze','Silver','Gold','Platinum'))
 ) AS NODE;
 GO
 
 --Создание таблиц рёбер
 
--- РЕБРО 1: BELONGS_TO (Модель выпускается Маркой)
+-- РЕБРО 1: BELONGS_TO (Модель принадлежит Марке)
 -- Направление: Models -> Brands
 CREATE TABLE BELONGS_TO AS EDGE;
 GO
@@ -126,7 +127,7 @@ GO
 ALTER TABLE PURCHASED_BY 
 ADD PurchaseDate DATE NOT NULL DEFAULT GETDATE(),
     PurchasePrice DECIMAL(12,2),
-    PaymentMethod NVARCHAR(50),
+    PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Наличные', 'Банковская карта', 'Кредит', 'Лизинг', 'Trade-in')),
     WarrantyYears INT,
     IsTradeIn BIT DEFAULT 0;
 GO
@@ -166,19 +167,19 @@ INSERT INTO Models (ModelName, ProductionStartYear, ProductionEndYear, BodyType,
 GO
 
 -- Заполнение ServiceCenters
-INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Specialization, WorkingHours, Rating, IsOfficialDealer) VALUES
-('АвтоПремиум Москва', 'ул. Ленинградский проспект, 39', '+7 495 123-45-67', 'info@autopremium.ru', 'Москва', 'Официальный дилер премиум-брендов', 'Пн-Сб 9:00-20:00', 4.8, 1),
-('Тойота Центр СПб', 'пр. Энгельса, 154', '+7 812 234-56-78', 'service@toyota-spb.ru', 'Санкт-Петербург', 'Официальный дилер Toyota', 'Пн-Вс 8:00-21:00', 4.9, 1),
-('ЭлектроАвто Сервис', 'ул. Новая, 25', '+7 495 345-67-89', 'ev@electroauto.ru', 'Москва', 'Специализированный сервис по электромобилям', 'Пн-Пт 10:00-19:00', 4.6, 0),
-('Немецкое Качество', 'ш. Ярославское, 120', '+7 495 456-78-90', 'info@germanquality.ru', 'Москва', 'Авторизованный сервис BMW, Mercedes, Audi', 'Пн-Сб 9:00-20:00', 4.7, 0),
-('АвтоСити Екатеринбург', 'ул. Малышева, 51', '+7 343 567-89-01', 'service@autocity-ekb.ru', 'Екатеринбург', 'Универсальный сервис', 'Пн-Сб 9:00-19:00', 4.3, 0),
-('Корейские Авто Новосибирск', 'ул. Красный проспект, 82', '+7 383 678-90-12', 'info@koreanauto-nsk.ru', 'Новосибирск', 'Официальный дилер Hyundai, Kia', 'Пн-Вс 9:00-20:00', 4.5, 1),
-('Вольво Центр Казань', 'пр. Победы, 141', '+7 843 789-01-23', 'service@volvo-kzn.ru', 'Казань', 'Официальный дилер Volvo', 'Пн-Сб 9:00-18:00', 4.8, 1),
-('Порше Центр Сочи', 'ул. Навагинская, 11', '+7 862 890-12-34', 'info@porsche-sochi.ru', 'Сочи', 'Официальный дилер Porsche', 'Пн-Сб 10:00-19:00', 4.9, 1),
-('АвтоМастер Краснодар', 'ул. Красная, 176', '+7 861 901-23-45', 'service@avtomaster-krd.ru', 'Краснодар', 'Специализированный ремонт', 'Пн-Пт 9:00-18:00', 4.2, 0),
-('Тесла Сервис Москва', 'ул. Тестовская, 10', '+7 495 012-34-56', 'service@tesla-msk.ru', 'Москва', 'Официальный сервисный центр Tesla', 'Пн-Вс 9:00-21:00', 4.9, 1),
-('Форд Центр Ростов', 'пр. Михаила Нагибина, 32', '+7 863 123-45-67', 'info@ford-rostov.ru', 'Ростов-на-Дону', 'Официальный дилер Ford', 'Пн-Сб 9:00-20:00', 4.6, 1),
-('АвтоЭксперт Воронеж', 'ул. Плехановская, 45', '+7 473 234-56-78', 'service@autoexpert-vrn.ru', 'Воронеж', 'Универсальный сервис', 'Пн-Сб 9:00-19:00', 4.4, 0);
+INSERT INTO ServiceCenters (CenterName, Address, PhoneNumber, Email, City, Specialization, OpenTime, CloseTime, Rating, IsOfficialDealer) VALUES
+('АвтоПремиум Москва', 'ул. Ленинградский проспект, 39', '+7 495 123-45-67', 'info@autopremium.ru', 'Москва', 'Официальный дилер премиум-брендов', '09:00', '20:00', 4.8, 1),
+('Тойота Центр СПб', 'пр. Энгельса, 154', '+7 812 234-56-78', 'service@toyota-spb.ru', 'Санкт-Петербург', 'Официальный дилер Toyota', '08:00', '21:00', 4.9, 1),
+('ЭлектроАвто Сервис', 'ул. Новая, 25', '+7 495 345-67-89', 'ev@electroauto.ru', 'Москва', 'Специализированный сервис по электромобилям', '10:00', '19:00', 4.6, 0),
+('Немецкое Качество', 'ш. Ярославское, 120', '+7 495 456-78-90', 'info@germanquality.ru', 'Москва', 'Авторизованный сервис BMW, Mercedes, Audi', '09:00', '20:00', 4.7, 0),
+('АвтоСити Екатеринбург', 'ул. Малышева, 51', '+7 343 567-89-01', 'service@autocity-ekb.ru', 'Екатеринбург', 'Универсальный сервис', '09:00', '19:00', 4.3, 0),
+('Корейские Авто Новосибирск', 'ул. Красный проспект, 82', '+7 383 678-90-12', 'info@koreanauto-nsk.ru', 'Новосибирск', 'Официальный дилер Hyundai, Kia', '09:00', '20:00', 4.5, 1),
+('Вольво Центр Казань', 'пр. Победы, 141', '+7 843 789-01-23', 'service@volvo-kzn.ru', 'Казань', 'Официальный дилер Volvo', '09:00', '18:00', 4.8, 1),
+('Порше Центр Сочи', 'ул. Навагинская, 11', '+7 862 890-12-34', 'info@porsche-sochi.ru', 'Сочи', 'Официальный дилер Porsche', '10:00', '19:00', 4.9, 1),
+('АвтоМастер Краснодар', 'ул. Красная, 176', '+7 861 901-23-45', 'service@avtomaster-krd.ru', 'Краснодар', 'Специализированный ремонт', '09:00', '18:00', 4.2, 0),
+('Тесла Сервис Москва', 'ул. Тестовская, 10', '+7 495 012-34-56', 'service@tesla-msk.ru', 'Москва', 'Официальный сервисный центр Tesla', '09:00', '21:00', 4.9, 1),
+('Форд Центр Ростов', 'пр. Михаила Нагибина, 32', '+7 863 123-45-67', 'info@ford-rostov.ru', 'Ростов-на-Дону', 'Официальный дилер Ford', '09:00', '20:00', 4.6, 1),
+('АвтоЭксперт Воронеж', 'ул. Плехановская, 45', '+7 473 234-56-78', 'service@autoexpert-vrn.ru', 'Воронеж', 'Универсальный сервис', '09:00', '19:00', 4.4, 0);
 GO
 
 -- Заполнение Customers
