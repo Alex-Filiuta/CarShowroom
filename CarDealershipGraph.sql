@@ -199,29 +199,17 @@ SELECT * FROM Customers
 -- 1. BELONGS_TO: Model -> Brand
 INSERT INTO BELONGS_TO ($from_id, $to_id, StartDate, IsCurrentModel)
 VALUES
-    -- X5 -> BMW
     ((SELECT $node_id FROM Models WHERE ModelID = 1),  (SELECT $node_id FROM Brands WHERE BrandID = 1),  '1999-01-01', 1),
-    -- Camry -> Toyota
     ((SELECT $node_id FROM Models WHERE ModelID = 2),  (SELECT $node_id FROM Brands WHERE BrandID = 3),  '1982-01-01', 1),
-    -- Model S -> Tesla
     ((SELECT $node_id FROM Models WHERE ModelID = 3),  (SELECT $node_id FROM Brands WHERE BrandID = 4),  '2012-01-01', 1),
-    -- A4 -> Audi
     ((SELECT $node_id FROM Models WHERE ModelID = 4),  (SELECT $node_id FROM Brands WHERE BrandID = 5),  '1994-01-01', 1),
-    -- Golf -> Volkswagen
     ((SELECT $node_id FROM Models WHERE ModelID = 5),  (SELECT $node_id FROM Brands WHERE BrandID = 6),  '1974-01-01', 1),
-    -- Mustang -> Ford
     ((SELECT $node_id FROM Models WHERE ModelID = 6),  (SELECT $node_id FROM Brands WHERE BrandID = 7),  '1964-01-01', 1),
-    -- Tucson -> Hyundai
     ((SELECT $node_id FROM Models WHERE ModelID = 7),  (SELECT $node_id FROM Brands WHERE BrandID = 8),  '2004-01-01', 1),
-    -- XC90 -> Volvo
     ((SELECT $node_id FROM Models WHERE ModelID = 8),  (SELECT $node_id FROM Brands WHERE BrandID = 9),  '2002-01-01', 1),
-    -- 911 -> Porsche
     ((SELECT $node_id FROM Models WHERE ModelID = 9),  (SELECT $node_id FROM Brands WHERE BrandID = 10), '1963-01-01', 1),
-    -- RX -> Lexus
     ((SELECT $node_id FROM Models WHERE ModelID = 10), (SELECT $node_id FROM Brands WHERE BrandID = 11), '1998-01-01', 1),
-    -- Sportage -> Kia
     ((SELECT $node_id FROM Models WHERE ModelID = 11), (SELECT $node_id FROM Brands WHERE BrandID = 12), '1993-01-01', 1),
-    -- Model 3 -> Tesla
     ((SELECT $node_id FROM Models WHERE ModelID = 12), (SELECT $node_id FROM Brands WHERE BrandID = 4),  '2017-01-01', 1);
 GO
 
@@ -268,29 +256,17 @@ SELECT * FROM SERVES
 -- 3. PURCHASES: Customer -> Model
 INSERT INTO PURCHASES ($from_id, $to_id, PurchaseDate, PurchasePrice, PaymentMethod, WarrantyYears, IsTradeIn)
 VALUES
-    -- Иван Петров купил X5
     ((SELECT $node_id FROM Customers WHERE CustomerID = 1), (SELECT $node_id FROM Models WHERE ModelID = 1),  '2024-03-15', 8500000.00, N'Банковская карта', 4, 1),
-    -- Мария Сидорова купила Camry
     ((SELECT $node_id FROM Customers WHERE CustomerID = 2), (SELECT $node_id FROM Models WHERE ModelID = 2),  '2024-02-20', 3500000.00, N'Наличные',         3, 0),
-    -- Алексей Козлов купил Model S
     ((SELECT $node_id FROM Customers WHERE CustomerID = 3), (SELECT $node_id FROM Models WHERE ModelID = 3),  '2024-04-10', 12000000.00, N'Банковская карта', 5, 0),
-    -- Елена Новикова купила Tucson
     ((SELECT $node_id FROM Customers WHERE CustomerID = 4), (SELECT $node_id FROM Models WHERE ModelID = 7),  '2024-01-25', 2800000.00, N'Наличные',         3, 1),
-    -- Дмитрий Соколов купил Sportage
     ((SELECT $node_id FROM Customers WHERE CustomerID = 5), (SELECT $node_id FROM Models WHERE ModelID = 11), '2024-05-12', 2600000.00, N'Банковская карта', 3, 0),
-    -- Анна Морозова купила XC90
     ((SELECT $node_id FROM Customers WHERE CustomerID = 6), (SELECT $node_id FROM Models WHERE ModelID = 8),  '2024-03-18', 7200000.00, N'Наличные',         4, 1),
-    -- Сергей Волков купил 911
     ((SELECT $node_id FROM Customers WHERE CustomerID = 7), (SELECT $node_id FROM Models WHERE ModelID = 9),  '2024-06-22', 11500000.00, N'Банковская карта', 4, 0),
-    -- Ольга Лебедева купила RX
     ((SELECT $node_id FROM Customers WHERE CustomerID = 8), (SELECT $node_id FROM Models WHERE ModelID = 10), '2024-04-30', 6100000.00, N'Наличные',         4, 0),
-    -- Михаил Павлов купил Mustang
     ((SELECT $node_id FROM Customers WHERE CustomerID = 9), (SELECT $node_id FROM Models WHERE ModelID = 6),  '2024-02-14', 5800000.00, N'Банковская карта', 3, 1),
-    -- Татьяна Егорова купила Model 3
     ((SELECT $node_id FROM Customers WHERE CustomerID = 10), (SELECT $node_id FROM Models WHERE ModelID = 12), '2024-05-25', 5500000.00, N'Наличные',         5, 0),
-    -- Андрей Григорьев купил Golf
     ((SELECT $node_id FROM Customers WHERE CustomerID = 11), (SELECT $node_id FROM Models WHERE ModelID = 5),  '2024-03-08', 2100000.00, N'Банковская карта', 3, 0),
-    -- Наталья Романова купила A4
     ((SELECT $node_id FROM Customers WHERE CustomerID = 12), (SELECT $node_id FROM Models WHERE ModelID = 4),  '2024-06-01', 4200000.00, N'Наличные',         3, 1);
 GO
 
